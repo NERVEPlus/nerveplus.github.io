@@ -13,22 +13,29 @@
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-  <!-- Luxury Typography -->
+  <!-- Bank Gothic fallback: Michroma is the closest free geometric match -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Didot&family=Futura&family=Helvetica+Neue:wght@100;300;400;500;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-  <!-- Custom Luxury CSS -->
   <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #0e0e0e;
+      --bg-card: #111111;
+      --border-heavy: #2a2a2a;
+      --border-light: #1e1e1e;
+      --accent: #5bb8f5;
+      --text-primary: #ffffff;
+      --text-secondary: #ffffff;
+      --text-muted: #888888;
+      --font-heading: 'Bank Gothic', 'BankGothic Md BT', 'Michroma', sans-serif;
+      --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -36,398 +43,938 @@
     }
 
     body {
-      font-family: 'Inter', 'Helvetica Neue', sans-serif;
+      font-family: var(--font-body);
       font-weight: 300;
-      background: #ffffff;
-      color: #000000;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       line-height: 1.6;
-      letter-spacing: 0.02em;
       overflow-x: hidden;
-      /* Added equal padding to both sides for centered content */
-      padding-left: 60px;
-      padding-right: 60px;
     }
 
-    /* Luxury Header */
+    /* ── HEADER ── */
     #header {
-      background: #ffffff;
-      padding: 30px 60px;
-      border-bottom: 1px solid #e0e0e0;
       position: fixed;
-      width: 100%;
       top: 0;
-      z-index: 997;
-      transition: all 0.5s;
-      /* Adjusted to account for body padding */
       left: 0;
+      width: 100%;
+      z-index: 997;
+      background: var(--bg-primary);
+      border-bottom: 2px solid var(--border-heavy);
+      transition: all 0.3s ease;
     }
 
-    #header.header-scrolled {
-      padding: 20px 60px;
-      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #header.scrolled .header-inner {
+      padding: 14px 40px;
     }
 
     .logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      color: #000000;
+      font-family: var(--font-heading);
+      font-size: 20px;
+      letter-spacing: 0.2em;
+      color: var(--text-primary);
       text-decoration: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .logo:hover {
-      color: #000000;
-      text-decoration: none;
+    .logo-mark {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      display: inline-block;
     }
 
-    /* Navigation */
+    .logo:hover { color: #ffffff; text-decoration: none; }
+
     #navbar ul {
       list-style: none;
       display: flex;
       margin: 0;
       padding: 0;
-      align-items: center;
-    }
-
-    #navbar li {
-      margin-left: 50px;
+      gap: 8px;
     }
 
     #navbar a {
-      color: #000000;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.08em;
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      transition: all 0.3s ease;
-      position: relative;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
     }
 
-    #navbar a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 1px;
-      bottom: -5px;
-      left: 0;
-      background-color: #000000;
-      transition: width 0.3s ease;
+    #navbar a:hover,
+    #navbar a.active {
+      color: var(--accent);
+      border-color: var(--border-heavy);
     }
 
-    #navbar a:hover::after {
-      width: 100%;
-    }
-
-    /* Hero Section */
+    /* ── HERO ── */
     #hero {
-      background: #ffffff;
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding: 120px 0 80px 0;
+      padding: 120px 0 80px;
       position: relative;
+      overflow: visible;
     }
 
-    #hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(48px, 8vw, 96px);
-      font-weight: 300;
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(36px, 6vw, 72px);
       letter-spacing: 0.08em;
-      margin-bottom: 30px;
-      line-height: 1.1;
-    }
-
-    #hero h2 {
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      color: #666666;
-      margin-bottom: 50px;
       text-transform: uppercase;
+      line-height: 1.15;
+      margin-bottom: 0;
     }
 
-    .luxury-divider {
-      width: 80px;
-      height: 1px;
-      background: #000000;
-      margin: 40px 0;
+    .hero-rule {
+      height: 4px;
+      background: var(--accent);
+      margin: 30px 0;
+      box-shadow:
+        0 0 8px rgba(91, 184, 245, 0.9),
+        0 0 24px rgba(91, 184, 245, 0.7),
+        0 0 60px rgba(91, 184, 245, 0.5),
+        0 0 120px rgba(91, 184, 245, 0.3),
+        0 0 200px rgba(91, 184, 245, 0.15);
     }
 
-    /* Buttons */
-    .btn-luxury {
-      display: inline-block;
-      padding: 25px 60px;
-      background: #000000;
-      color: #ffffff;
+
+    .hero-subtitle {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+    }
+
+    .hero-subtitle span {
+      color: var(--accent);
+      margin: 0 12px;
+    }
+
+    .btn-primary-cta {
+      font-family: var(--font-heading);
       font-size: 12px;
-      font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border: 1px solid #000000;
-    }
-
-    .btn-luxury:hover {
+      padding: 18px 48px;
       background: #ffffff;
       color: #000000;
+      text-decoration: none;
+      border: 2px solid #ffffff;
+      display: inline-block;
+      transition: all 0.2s ease;
     }
 
-    .btn-luxury-outline {
-      display: inline-block;
-      padding: 15px 50px;
+    .btn-primary-cta:hover {
       background: transparent;
-      color: #000000;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .btn-outline-cta {
+      font-family: var(--font-heading);
       font-size: 12px;
-      font-weight: 400;
       letter-spacing: 0.15em;
       text-transform: uppercase;
+      padding: 18px 48px;
+      background: transparent;
+      color: var(--text-primary);
       text-decoration: none;
-      transition: all 0.3s ease;
-      border: 1px solid #000000;
+      border: 2px solid var(--border-heavy);
+      display: inline-block;
+      transition: all 0.2s ease;
+      margin-left: 16px;
     }
 
-    .btn-luxury-outline:hover {
-      background: #000000;
+    .btn-outline-cta:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-rows: repeat(3, auto);
+      gap: 0;
+      border: 2px solid var(--border-heavy);
+      min-width: 240px;
+    }
+
+    .hero-stat {
+      padding: 24px 30px;
+      border-bottom: 1px solid var(--border-light);
+      text-align: center;
+    }
+
+    .hero-stat:last-child {
+      border-bottom: none;
+    }
+
+    .hero-stat-value {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      letter-spacing: 0.05em;
       color: #ffffff;
+      display: block;
     }
 
-    /* Sections */
+    .hero-stat-label {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── HERO TEXT WHITE WIPE + FADE REVEAL ── */
+    @keyframes textWipeFade {
+      0% {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      100% {
+        clip-path: inset(0 0% 0 0);
+        opacity: 1;
+      }
+    }
+
+    .hero-text h1 {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    }
+
+    .hero-rule {
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+    }
+
+    .hero-subtitle {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.1s forwards;
+    }
+
+    .hero-text > div:last-child {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.4s forwards;
+    }
+
+    .hero-stats {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.7s forwards;
+    }
+
+    /* ── TERMINAL PERIOD BLINK ── */
+    @keyframes periodBlink {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .hero-period {
+      display: inline-block;
+      color: var(--accent);
+      animation: periodBlink 1s step-end infinite;
+      animation-delay: 2.2s;
+      opacity: 0;
+    }
+
+    /* ── SECTIONS (shared) ── */
+    .section-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
     section {
       padding: 100px 0;
     }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 80px;
+    .section-header {
+      margin-bottom: 60px;
+      position: relative;
     }
 
-    .section-title h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 42px;
-      font-weight: 400;
-      letter-spacing: 0.05em;
+    .section-tag {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(24px, 3.5vw, 40px);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .section-rule {
+      height: 2px;
+      background: var(--border-light);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .section-rule::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 1.5s ease-out;
+    }
+
+    .section-rule.animate::after {
+      width: 80%;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--border-heavy);
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+    }
+
+    .service-cell {
+      padding: 40px 36px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-card);
+      transition: all 0.2s ease;
+    }
+
+    .service-cell:last-child {
+      border-right: none;
+    }
+
+    .service-cell:hover {
+      background: #161616;
+    }
+
+    .service-number {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .service-cell h3 {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .service-cell p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .service-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg-primary);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
       margin-bottom: 20px;
     }
 
-    .section-title p {
-      font-size: 16px;
-      color: #666666;
-      font-weight: 300;
-    }
 
-    /* Services Grid */
-    .services-grid {
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 60px;
-      margin-top: 60px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border: 2px solid var(--border-heavy);
     }
 
-    .service-card {
-      text-align: center;
-      padding: 40px;
+    .stat-cell {
+      padding: 32px 28px;
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-card);
+    }
+
+    .stat-cell:last-child {
+      border-right: none;
+    }
+
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ── BRAND BANNERS ── */
+    .brand-banner {
+      padding: 80px 0;
+      background: #050505;
+      border-top: 2px solid var(--border-heavy);
+    }
+
+    .banner-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .banner-tag {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .banner-title {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 3vw, 36px);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .banner-text {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin-bottom: 0;
+    }
+
+    .university-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .uni-tag {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border: 1px solid var(--border-heavy);
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .uni-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .university-logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 50px;
+      margin-top: 30px;
+      align-items: center;
+    }
+
+    .uni-logo-item {
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+    }
+
+    .uni-logo-item:hover {
+      transform: scale(1.15);
+    }
+
+    .uni-logo-item img {
+      filter: grayscale(100%) brightness(1.8);
       transition: all 0.3s ease;
     }
 
-    .service-card:hover {
-      transform: translateY(-10px);
+    .uni-logo-item:hover img {
+      filter: grayscale(0%) brightness(1);
     }
 
-    .service-icon {
-      font-size: 48px;
-      margin-bottom: 30px;
-      color: #000000;
+
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 30px;
     }
 
-    .service-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 400;
-      margin-bottom: 20px;
-      letter-spacing: 0.03em;
+    .brand-logos img {
+      height: 80px;
+      filter: grayscale(100%) brightness(1.8);
+      transition: all 0.3s ease;
     }
 
-    .service-card p {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #666666;
+    .brand-logos img:hover {
+      transform: scale(1.15);
+      filter: grayscale(0%) brightness(1);
     }
 
-    /* About Section */
-    #about {
-      background: #fafafa;
+    .highlight-line {
+      color: var(--accent);
+      background-image: linear-gradient(var(--accent), var(--accent));
+      background-size: 0% 1px;
+      background-position: left bottom;
+      background-repeat: no-repeat;
+      padding-bottom: 2px;
     }
 
-    .about-content {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
+    .highlight-line.animate {
+      animation: underlineExpand 1.5s ease-out forwards;
     }
 
-    .about-content h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 400;
-      margin-bottom: 30px;
+    @keyframes underlineExpand {
+      to {
+        background-size: 100% 1px;
+      }
     }
 
-    .about-content p {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #333333;
-      margin-bottom: 20px;
+    /* ── CAPABILITIES ── */
+    #capabilities {
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--border-heavy);
+      border-bottom: 2px solid var(--border-heavy);
     }
 
-    /* Stats */
-    .stats-container {
+    .capabilities-table {
+      border: 2px solid var(--border-heavy);
+      background: var(--bg-card);
+    }
+
+    .cap-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      margin-top: 60px;
-      justify-items: center; /* Center grid items */
+      grid-template-columns: 260px 1fr;
+      border-bottom: 1px solid var(--border-light);
     }
 
-    .stat-item {
-      text-align: center;
-      width: 100%; /* Ensure full width within grid cell */
+    .cap-row:last-child {
+      border-bottom: none;
     }
 
-    .stat-item h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 400;
-      margin-bottom: 10px;
-      color: #000000;
-    }
-
-    .stat-item p {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #666666;
-      white-space: nowrap; /* Prevent text wrapping */
-    }
-
-    /* Contact Section */
-    #contact {
-      background: #ffffff;
-    }
-
-    .contact-info {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 60px;
-      margin-top: 60px;
-    }
-
-    .contact-item {
-      text-align: center;
-    }
-
-    .contact-item h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .contact-item p {
-      font-size: 14px;
-      line-height: 1.8;
-      color: #666666;
-    }
-
-    .contact-item a {
-      color: #000000;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .contact-item a:hover {
-      color: #333333;
-    }
-
-    /* Footer */
-    #footer {
-      background: #000000;
-      color: #ffffff;
-      padding: 60px 0 30px 0;
-      text-align: center;
-      margin-left: -60px; /* Compensate for body left padding */
-      margin-right: -60px; /* Compensate for body right padding */
-      width: calc(100% + 120px); /* Extend to full width (60px + 60px) */
-    }
-
-    .footer-content h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      font-weight: 400;
-      margin-bottom: 30px;
+    .cap-category {
+      font-family: var(--font-heading);
+      font-size: 13px;
       letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 24px 30px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+    }
+
+    .cap-items {
+      padding: 24px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cap-tag {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .cap-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .cta-bar {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg-primary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+    }
+
+    .contact-cell {
+      padding: 40px 36px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-card);
+    }
+
+    .contact-cell:last-child {
+      border-right: none;
+    }
+
+    .contact-cell h4 {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .contact-cell p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .contact-cell a {
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-light);
+      transition: all 0.2s ease;
+    }
+
+    .contact-cell a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    #footer {
+      background: #050505;
+      color: #ffffff;
+      padding: 40px 0;
+      border-top: 2px solid var(--border-heavy);
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
     }
 
     .footer-links {
-      margin-bottom: 30px;
+      display: flex;
+      gap: 30px;
     }
 
     .footer-links a {
-      margin: 0 20px;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 12px;
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      transition: color 0.3s ease;
+      color: #888888;
+      text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .footer-links a:hover {
-      color: #cccccc;
+      color: var(--accent);
     }
 
-    .copyright {
-      font-size: 12px;
-      color: #999999;
-      padding-top: 30px;
-      border-top: 1px solid #333333;
+    .footer-logo {
+      color: #ffffff;
     }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-      /* Reduce padding on mobile devices */
-      body {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-      
-      #header {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-      
-      #header.header-scrolled {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-      
-      #footer {
-        margin-left: -20px; /* Compensate for body left padding on mobile */
-        margin-right: -20px; /* Compensate for body right padding on mobile */
-        width: calc(100% + 40px); /* Extend to full width on mobile (20px + 20px) */
-      }
-      
-      #navbar li {
-        margin-left: 20px;
-      }
-      
-      #hero h1 {
-        font-size: 48px;
-      }
-      
-      .services-grid {
+    .footer-copy {
+      font-size: 11px;
+      color: #666666;
+    }
+
+    /* ── MOBILE NAV ── */
+    .mobile-nav-toggle {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--text-primary);
+      background: none;
+      border: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero-grid {
         grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+        min-width: unset;
+      }
+
+      .hero-stat {
+        border-bottom: none;
+        border-right: 1px solid var(--border-light);
+      }
+
+      .hero-stat:last-child {
+        border-right: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .cap-row {
+        grid-template-columns: 1fr;
+      }
+
+      .cap-category {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-inner {
+        padding: 16px 20px;
+      }
+
+      #header.scrolled .header-inner {
+        padding: 12px 20px;
+      }
+
+      .mobile-nav-toggle {
+        display: block;
+      }
+
+      #navbar {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-primary);
+        border-bottom: 2px solid var(--border-heavy);
+        padding: 20px;
+      }
+
+      #navbar.open {
+        display: block;
+      }
+
+      #navbar ul {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      #navbar a {
+        display: block;
+        padding: 12px 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .section-container, .hero-container {
+        padding: 0 20px;
+      }
+
+      .services-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-cell,
+      .contact-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .service-cell:last-child,
+      .contact-cell:last-child {
+        border-bottom: none;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stat {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .hero-stat:last-child {
+        border-bottom: none;
+      }
+
+      .btn-outline-cta {
+        margin-left: 0;
+        margin-top: 12px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+
+      .brand-banner {
+        padding: 50px 0;
+      }
+
+      .banner-inner {
+        padding: 0 20px;
+      }
+
+      .brand-logos {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      .brand-logos img {
+        height: 60px !important;
+      }
+
+      .university-logos {
+        justify-content: center;
+        gap: 24px;
+      }
+
+      .uni-logo-item img {
+        max-width: 100%;
+      }
+
+      .university-logos .uni-logo-item img[alt="University of Oxford"],
+      .university-logos .uni-logo-item img[alt="MIT"],
+      .university-logos .uni-logo-item img[alt="Harvard University"] {
+        height: 80px !important;
+      }
+
+      .university-logos .uni-logo-item img[alt="Imperial College London"] {
+        height: 25px !important;
+      }
+
+      .university-logos .uni-logo-item img[alt="Yale University"] {
+        height: 35px !important;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .stat-cell:last-child {
+        border-bottom: none;
       }
     }
   </style>
@@ -437,33 +984,57 @@
 <body>
 
   <!-- ======= Header ======= -->
-  <header id="header" class="d-flex align-items-center">
-    <div class="container d-flex align-items-center justify-content-between">
+  <header id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        NERVE PLUS INC
+      </a>
 
-      <a href="index.html" class="logo">NERVE PLUS INC</a>
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
 
-      <nav id="navbar" class="navbar">
+      <nav id="navbar">
         <ul>
           <li><a href="#services">Solutions</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#capabilities">Capabilities</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
-
     </div>
   </header>
 
   <!-- ======= Hero Section ======= -->
   <section id="hero">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8">
-          <h1>Enterprise<br>Intelligence.<br>Redefined.</h1>
-          <div class="luxury-divider"></div>
-          <h2>Enterprise-Grade AI • Infrastructure • Government Security</h2>
-          <a href="#services" class="btn-luxury">Explore Solutions</a>
+    <div class="hero-container">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <h1>Enterprise<br>Intelligence.<br>Redefined<span class="hero-period">.</span></h1>
+          <div class="hero-rule"></div>
+          <p class="hero-subtitle">
+            AI <span>//</span> Infrastructure <span>//</span> Security
+          </p>
+          <div>
+            <a href="#services" class="btn-primary-cta">Explore Solutions</a>
+            <a href="#contact" class="btn-outline-cta">Contact Us</a>
+          </div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-value">99.99%</span>
+            <span class="hero-stat-label">System Uptime</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">FedRAMP</span>
+            <span class="hero-stat-label">Compliance Ready</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-value">24/7</span>
+            <span class="hero-stat-label">Enterprise Support</span>
+          </div>
         </div>
       </div>
     </div>
@@ -472,139 +1043,196 @@
   <main id="main">
 
     <!-- ======= Services Section ======= -->
-    <section id="services" class="services">
-      <div class="container">
-        
-        <div class="section-title">
-          <h2>Core Capabilities</h2>
-          <p>Precision-engineered solutions for the modern enterprise</p>
+    <section id="services">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">What We Do</span>
+          <h2 class="section-title">Core Capabilities</h2>
+          <div class="section-rule"></div>
         </div>
 
         <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-cpu"></i>
-            </div>
+          <div class="service-cell">
+            <span class="service-number">01</span>
+            <div class="service-divider"></div>
             <h3>Enterprise AI</h3>
             <p>Advanced machine learning and artificial intelligence solutions designed for mission-critical applications. Scalable, secure, and built for the demands of enterprise operations.</p>
           </div>
 
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-server"></i>
-            </div>
-            <h3>Infrastructure Excellence</h3>
+          <div class="service-cell">
+            <span class="service-number">02</span>
+            <div class="service-divider"></div>
+            <h3>Infrastructure</h3>
             <p>Cloud-native architecture and hybrid infrastructure solutions. Engineered for resilience, optimized for performance, and designed to scale with your enterprise needs.</p>
           </div>
 
-          <div class="service-card">
-            <div class="service-icon">
-              <i class="bi bi-shield-check"></i>
-            </div>
-            <h3>Government-Grade Security</h3>
+          <div class="service-cell">
+            <span class="service-number">03</span>
+            <div class="service-divider"></div>
+            <h3>Security</h3>
             <p>FedRAMP-ready, FISMA-compliant security frameworks. Zero-trust architecture with advanced threat detection and response capabilities meeting federal standards.</p>
           </div>
         </div>
-
       </div>
     </section>
 
     <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-        
-        <div class="about-content">
-          <h3>Precision in Every Layer</h3>
-          <p>NERVE PLUS INC represents the convergence of sophisticated technology and uncompromising standards. We architect solutions that transcend conventional boundaries, delivering intelligence systems that operate at the intersection of innovation and security.</p>
-          <p>Our commitment to excellence is reflected in every engagement. From Fortune 500 enterprises to federal agencies, we provide the technological foundation that powers mission-critical operations with unwavering reliability.</p>
-          
-          <div class="stats-container">
-            <div class="stat-item">
-              <h4>99.99%</h4>
-              <p>System Uptime</p>
+    <section id="about">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Who We Are</span>
+          <h2 class="section-title">Precision in Every Layer</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p><span class="highlight-line">NERVE PLUS Inc</span> is a private engineering firm specializing in enterprise applications which revolve around applied deep technologies, with elite engineering talent.</p>
+            <p>Our commitment to excellence is reflected in every engagement. From Fortune 500 enterprises to federal agencies, we provide the technological foundation that powers mission-critical operations with unwavering reliability.</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-cell">
+              <span class="stat-value">SOC 2</span>
+              <span class="stat-label">Type II</span>
             </div>
-            <div class="stat-item">
-              <h4>FedRAMP</h4>
-              <p>Security Compliance</p>
+            <div class="stat-cell">
+              <span class="stat-value">CMMC</span>
+              <span class="stat-label">Compliant</span>
             </div>
-            <div class="stat-item">
-              <h4>24/7</h4>
-              <p>Enterprise Support</p>
+            <div class="stat-cell">
+              <span class="stat-value">ITAR</span>
+              <span class="stat-label">Registered</span>
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
+    <!-- ======= Brand Banner 1: Silicon Valley ======= -->
+    <div class="brand-banner">
+      <div class="banner-inner">
+        <span class="banner-tag">Our Advantage</span>
+        <h3 class="banner-title"><span class="highlight-line">Silicon Valley Expertise</span> Meets<br>Enterprise Scale</h3>
+        <p class="banner-text"><span class="highlight-line">Born in Silicon Valley,</span> NERVE PLUS Inc bridges the gap between Silicon Valley agility and the rigorous demands of large-scale enterprise deployments. We <span class="highlight-line">bring deep tech engineering</span> and <span class="highlight-line">expertise to government agencies</span>, <span class="highlight-line">federal programs</span>, and <span class="highlight-line">Fortune 500</span> operations, delivering <span class="highlight-line">the cutting-edge</span> built for mission-critical environments with practicality at scale. Contact <a href="mailto:enterprise@nerveplusinc.com" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border-light);transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border-light)'">enterprise@nerveplusinc.com</a> to learn more of our <span class="highlight-line">successful</span> production deployments and maintenance <span style="color:var(--accent);text-decoration:underline;">*requires NDA for disclosure.</span></p>
+        <div class="brand-logos">
+          <a href="https://about.gitlab.com" target="_blank"><img src="brands/gitlab.png" alt="GitLab" style="height:180px;"></a>
+          <a href="https://www.energy.gov" target="_blank"><img src="brands/usdoe.png" alt="U.S. Department of Energy" style="height:110px;"></a>
+          <a href="https://www.ferc.gov" target="_blank"><img src="brands/ferc.jpg" alt="FERC" style="height:200px;"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Brand Banner 2: Talent ======= -->
+    <div class="brand-banner">
+      <div class="banner-inner">
+        <span class="banner-tag">Our People</span>
+        <h3 class="banner-title"><span class="highlight-line">Elite Engineering Talent</span> From<br>The World's Best</h3>
+        <p class="banner-text"><span class="highlight-line">We exclusively recruit engineers, strictly, from the world's top 10 universities.</span> Our team is built from the same talent pipeline that powers the world's most advanced technology applied for enterprise applications. All of whom are U.S. Citizens, with at least one post-baccalaureate advanced degree, and qualify for advanced U.S government security clearances.</p>
+        <div class="university-logos">
+          <a class="uni-logo-item" href="https://www.ox.ac.uk" target="_blank">
+            <img src="brands/oxford.png" alt="University of Oxford" style="height:140px;">
+          </a>
+          <a class="uni-logo-item" href="https://www.mit.edu" target="_blank">
+            <img src="brands/mit.png" alt="MIT" style="height:140px;">
+          </a>
+          <a class="uni-logo-item" href="https://www.harvard.edu" target="_blank">
+            <img src="brands/harvard.png" alt="Harvard University" style="height:140px;">
+          </a>
+          <a class="uni-logo-item" href="https://www.imperial.ac.uk" target="_blank">
+            <img src="brands/imperial.png" alt="Imperial College London" style="height:40px;">
+          </a>
+          <a class="uni-logo-item" href="https://www.yale.edu" target="_blank">
+            <img src="brands/yale.png" alt="Yale University" style="height:80px;">
+          </a>
+        </div>
+      </div>
+    </div>
+
     <!-- ======= Capabilities Section ======= -->
-    <section id="capabilities" class="capabilities">
-      <div class="container">
-        
-        <div class="section-title">
-          <h2>Engineered for Excellence</h2>
-          <p>Technology solutions that define industry standards</p>
+    <section id="capabilities">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Technical Scope</span>
+          <h2 class="section-title">Engineered for Excellence</h2>
+          <div class="section-rule"></div>
         </div>
 
-        <div class="row">
-          <div class="col-lg-6">
-            <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 30px;">AI & Machine Learning</h4>
-            <ul style="list-style: none; padding: 0;">
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Natural Language Processing</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Computer Vision Systems</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Predictive Analytics</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Autonomous Decision Systems</li>
-            </ul>
+        <div class="capabilities-table">
+          <div class="cap-row">
+            <div class="cap-category">AI & Machine Learning</div>
+            <div class="cap-items">
+              <span class="cap-tag">Natural Language Processing</span>
+              <span class="cap-tag">Computer Vision</span>
+              <span class="cap-tag">Predictive Analytics</span>
+              <span class="cap-tag">Autonomous Systems</span>
+            </div>
           </div>
-          <div class="col-lg-6">
-            <h4 style="font-family: 'Playfair Display', serif; margin-bottom: 30px;">Security & Compliance</h4>
-            <ul style="list-style: none; padding: 0;">
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Zero-Trust Architecture</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">SIEM Integration</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Continuous Compliance Monitoring</li>
-              <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">Advanced Threat Intelligence</li>
-            </ul>
+          <div class="cap-row">
+            <div class="cap-category">Infrastructure</div>
+            <div class="cap-items">
+              <span class="cap-tag">Cloud-Native Architecture</span>
+              <span class="cap-tag">Hybrid Deployment</span>
+              <span class="cap-tag">Edge Computing</span>
+              <span class="cap-tag">High Availability</span>
+            </div>
+          </div>
+          <div class="cap-row">
+            <div class="cap-category">Security & Compliance</div>
+            <div class="cap-items">
+              <span class="cap-tag">Zero-Trust Architecture</span>
+              <span class="cap-tag">SIEM Integration</span>
+              <span class="cap-tag">Continuous Monitoring</span>
+              <span class="cap-tag">Threat Intelligence</span>
+            </div>
+          </div>
+          <div class="cap-row">
+            <div class="cap-category">Data & Analytics</div>
+            <div class="cap-items">
+              <span class="cap-tag">Real-Time Processing</span>
+              <span class="cap-tag">Data Warehousing</span>
+              <span class="cap-tag">Business Intelligence</span>
+              <span class="cap-tag">ETL Pipelines</span>
+            </div>
           </div>
         </div>
 
-        <div class="text-center" style="margin-top: 60px;">
-          <a href="#contact" class="btn-luxury-outline" target="_blank">Schedule Consultation or Contact for Products & Services Brochure</a>
+        <div class="cta-bar">
+          <a href="#contact" class="btn-outline-cta">Request Capabilities Brochure</a>
         </div>
-
       </div>
     </section>
 
     <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
-      <div class="container">
-        
-        <div class="section-title">
-          <h2>Connect With Excellence</h2>
-          <p>Begin your transformation with NERVE PLUS INC</p>
+    <section id="contact">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Get in Touch</span>
+          <h2 class="section-title">Connect With Us</h2>
+          <div class="section-rule"></div>
         </div>
 
-        <div class="contact-info">
-          <div class="contact-item">
+        <div class="contact-grid">
+          <div class="contact-cell">
             <h4>Headquarters</h4>
             <p>NERVE PLUS Inc<br>
             101 Jefferson Street, Floor 1<br>
             Menlo Park, CA 94205</p>
           </div>
-          
-          <div class="contact-item">
+
+          <div class="contact-cell">
             <h4>Federal Division</h4>
             <p>1801 K Street NW<br>
-            Washington, DC 20006<br></p>
+            Washington, DC 20006</p>
           </div>
-          
-          <div class="contact-item">
+
+          <div class="contact-cell">
             <h4>Contact</h4>
             <p>Enterprise Solutions<br>
             <a href="mailto:enterprise@nerveplusinc.com">enterprise@nerveplusinc.com</a><br>
-            <a href="tel:+16506656100">+1 (650)-665-6100</a></p>
+            <a href="tel:+16506656100">+1 (650) 665-6100</a></p>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -612,57 +1240,51 @@
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
-    <div class="container">
-      <div class="footer-content">
-        <h3>NERVE PLUS INC</h3>
-        <div class="footer-links">
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-        </div>
-        <div class="copyright">
-          © 2025 NERVE PLUS INC. All Rights Reserved.
-        </div>
+    <div class="footer-inner">
+      <span class="footer-logo">Nerve Plus Inc</span>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
       </div>
+      <span class="footer-copy">&copy; 2026 NERVE PLUS INC. All Rights Reserved.</span>
     </div>
   </footer>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-  <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
-
-  <!-- Custom Luxury Animations -->
+  <!-- Scripts -->
   <script>
-    // Smooth header transition on scroll
+    // Header scroll behavior
     window.addEventListener('scroll', function() {
-      if (window.scrollY > 100) {
-        document.getElementById('header').classList.add('header-scrolled');
-      } else {
-        document.getElementById('header').classList.remove('header-scrolled');
-      }
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
     });
 
-    // Smooth scrolling for anchor links
+    // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function(e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       });
+    });
+
+    // Highlight underline animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.highlight-line, .section-rule').forEach(el => observer.observe(el));
+
+    // Mobile nav toggle
+    document.querySelector('.mobile-nav-toggle').addEventListener('click', function() {
+      document.getElementById('navbar').classList.toggle('open');
+      const icon = this.querySelector('i');
+      icon.classList.toggle('bi-list');
+      icon.classList.toggle('bi-x');
     });
   </script>
 
