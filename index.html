@@ -100,9 +100,25 @@
     #navbar ul {
       list-style: none;
       display: flex;
+      align-items: center;
       margin: 0;
       padding: 0;
       gap: 8px;
+    }
+
+    /* Every nav item is the same kind of box.
+       The links were inline, so their vertical padding did not expand the line
+       box and the text sat at the top of a list item stretched to match the
+       taller dropdown button, which centres its own text. Same padding, same
+       border, different display, and the labels landed on two different
+       baselines. Making both inline-flex with an explicit line-height puts
+       them on one. */
+    #navbar a,
+    .nav-dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      margin: 0;
     }
 
     #navbar a {
@@ -122,6 +138,113 @@
       color: var(--accent);
       border-color: var(--border-heavy);
     }
+
+    /* ── PRODUCTS DROPDOWN ── */
+    .nav-dropdown { position: relative; }
+
+    .nav-dropdown-toggle {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: none;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-dropdown-toggle:hover,
+    .nav-dropdown-toggle.active,
+    .nav-dropdown:hover .nav-dropdown-toggle {
+      color: var(--accent);
+      border-color: var(--border-heavy);
+    }
+
+    .nav-chev {
+      width: 6px;
+      height: 6px;
+      border-right: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      transform: translateY(-1px) rotate(45deg);
+      transition: transform 0.2s ease;
+    }
+
+    .nav-dropdown:hover .nav-chev,
+    .nav-dropdown.open .nav-chev {
+      transform: translateY(1px) rotate(-135deg);
+    }
+
+    .nav-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      min-width: 340px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-heavy);
+      padding: 24px 26px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.2s ease;
+      z-index: 998;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-panel,
+    .nav-dropdown:focus-within .nav-dropdown-panel,
+    .nav-dropdown.open .nav-dropdown-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .panel-heading {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 6px;
+    }
+
+    #navbar .panel-item {
+      display: block;
+      padding: 14px 0 12px;
+      border: none;
+      border-bottom: 1px solid var(--border-light);
+      text-decoration: none;
+    }
+
+    #navbar .panel-item:last-child { border-bottom: none; }
+    #navbar .panel-item:hover { border-color: var(--border-light); }
+
+    .panel-item-name {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .panel-item-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text-muted);
+      display: block;
+      line-height: 1.6;
+    }
+
+    #navbar .panel-item:hover .panel-item-desc { color: var(--text-secondary); }
 
     /* ── HERO ── */
     #hero {
@@ -148,6 +271,9 @@
     }
 
     .hero-text h1 {
+      /* Soft halo, not a scrim: keeps white crisp on bright water
+         without putting a visible dark shape behind the text. */
+      text-shadow: 0 1px 18px rgba(0, 22, 38, 0.30), 0 1px 2px rgba(0, 22, 38, 0.22);
       font-family: var(--font-heading);
       font-size: clamp(36px, 6vw, 72px);
       letter-spacing: 0.08em;
@@ -170,6 +296,7 @@
 
 
     .hero-subtitle {
+      text-shadow: 0 1px 10px rgba(0, 22, 38, 0.40), 0 1px 2px rgba(0, 22, 38, 0.30);
       font-family: var(--font-heading);
       font-size: 13px;
       letter-spacing: 0.2em;
@@ -179,7 +306,10 @@
     }
 
     .hero-subtitle span {
-      color: var(--accent);
+      /* White, not accent: the hero sits on bright water now and #5bb8f5
+         cannot hold 4.5:1 against it. Accent is unchanged elsewhere. */
+      color: #ffffff;
+      opacity: 0.75;
       margin: 0 12px;
     }
 
@@ -209,7 +339,7 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       padding: 18px 48px;
-      background: transparent;
+      background: var(--bg-card);
       color: var(--text-primary);
       text-decoration: none;
       border: 2px solid var(--border-heavy);
@@ -229,6 +359,7 @@
       gap: 0;
       border: 2px solid var(--border-heavy);
       min-width: 240px;
+      background: var(--bg-card);
     }
 
     .hero-stat {
@@ -532,73 +663,53 @@
       margin-bottom: 0;
     }
 
-    .university-tags {
+    /* Scrolling brand bar. The track holds two copies of the logo set, so
+       translating it by exactly -50% loops with no visible seam. */
+    .brand-marquee {
+      margin-top: 34px;
+      overflow: hidden;
+      position: relative;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+
+    .brand-track {
       display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 30px;
+      align-items: center;
+      gap: 90px;
+      width: max-content;
+      animation: brandScroll 32s linear infinite;
     }
 
-    .uni-tag {
-      font-family: var(--font-heading);
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 10px 24px;
-      border: 1px solid var(--border-heavy);
-      color: #ffffff;
-      transition: all 0.2s ease;
+    .brand-marquee:hover .brand-track { animation-play-state: paused; }
+
+    @keyframes brandScroll {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-50%, 0, 0); }
     }
 
-    .uni-tag:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .university-logos {
+    .brand-track a {
+      flex: 0 0 auto;
       display: flex;
-      flex-wrap: wrap;
-      gap: 50px;
-      margin-top: 30px;
       align-items: center;
     }
 
-    .uni-logo-item {
-      display: flex;
-      align-items: center;
-      transition: transform 0.3s ease;
-    }
-
-    .uni-logo-item:hover {
-      transform: scale(1.15);
-    }
-
-    .uni-logo-item img {
+    .brand-track img {
+      height: 78px;
+      width: auto;
+      object-fit: contain;
       filter: grayscale(100%) brightness(1.8);
-      transition: all 0.3s ease;
+      opacity: 0.72;
+      transition: filter 0.3s ease, opacity 0.3s ease;
     }
 
-    .uni-logo-item:hover img {
+    .brand-track a:hover img {
       filter: grayscale(0%) brightness(1);
+      opacity: 1;
     }
 
-
-    .brand-logos {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 30px;
-    }
-
-    .brand-logos img {
-      height: 80px;
-      filter: grayscale(100%) brightness(1.8);
-      transition: all 0.3s ease;
-    }
-
-    .brand-logos img:hover {
-      transform: scale(1.15);
-      filter: grayscale(0%) brightness(1);
+    @media (prefers-reduced-motion: reduce) {
+      .brand-track { animation: none; }
     }
 
     .highlight-line {
@@ -784,13 +895,149 @@
     }
 
     /* ── MOBILE NAV ── */
+    /* Drawn in CSS so the toggle never depends on an icon font loading. */
     .mobile-nav-toggle {
       display: none;
-      font-size: 24px;
       cursor: pointer;
-      color: var(--text-primary);
       background: none;
       border: none;
+      padding: 6px;
+      width: 34px;
+      height: 30px;
+      position: relative;
+    }
+
+    .mobile-nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      margin: 4px auto;
+      transition: all 0.25s ease;
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .mobile-nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .mobile-nav-toggle.is-open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+
+    /* ── HERO SIGNAL FIELD (animated accent) ── */
+    .hero-field {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Slowly drifting network grid, masked so it never competes with the text */
+    .hero-field::before {
+      content: '';
+      position: absolute;
+      inset: -70px;
+      background-image:
+        linear-gradient(to right, rgba(91, 184, 245, 0.075) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(91, 184, 245, 0.075) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 62% 58% at 68% 45%, #000 0%, rgba(0,0,0,0.55) 45%, transparent 76%);
+      mask-image: radial-gradient(ellipse 62% 58% at 68% 45%, #000 0%, rgba(0,0,0,0.55) 45%, transparent 76%);
+      animation: gridDrift 26s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes gridDrift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(64px, 64px, 0); }
+    }
+
+    /* Light blue scan beam sweeping down the hero */
+    .hero-field::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 220px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(91, 184, 245, 0.045) 42%,
+        rgba(91, 184, 245, 0.11) 50%,
+        rgba(91, 184, 245, 0.045) 58%,
+        transparent 100%);
+      animation: scanSweep 11s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes scanSweep {
+      0%        { transform: translate3d(0, -240px, 0); opacity: 0; }
+      12%       { opacity: 1; }
+      82%       { opacity: 1; }
+      100%      { transform: translate3d(0, 120vh, 0); opacity: 0; }
+    }
+
+    /* Traveling pulse along the accent rule */
+    .hero-rule,
+    .page-hero-rule {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-rule::after,
+    .page-hero-rule::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 38%,
+        rgba(255, 255, 255, 0.95) 50%,
+        rgba(255, 255, 255, 0.15) 62%,
+        transparent 100%);
+      background-size: 220% 100%;
+      background-repeat: no-repeat;
+      animation: ruleSweep 6s ease-in-out infinite;
+    }
+
+    @keyframes ruleSweep {
+      0%        { background-position: -120% 0; }
+      65%, 100% { background-position: 220% 0; }
+    }
+
+    /* Breathing glow behind the accent rule */
+    @keyframes ruleBreathe {
+      0%, 100% { opacity: 0.75; }
+      50%      { opacity: 1; }
+    }
+
+    /* WebGL caustics layer */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .hero-field.is-webgl .hero-canvas { opacity: 0.92; }
+
+    /* WebGL supersedes the CSS grid + scan; never run both */
+    .hero-field.is-webgl::before,
+    .hero-field.is-webgl::after { display: none; }
+
+    /* Keep hero content above the field */
+    .hero-container,
+    .page-hero { position: relative; z-index: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-field::before,
+      .hero-field::after,
+      .hero-rule::after,
+      .page-hero-rule::after { animation: none; }
+      .hero-field::after { opacity: 0; }
+      .hero-canvas { transition: none; }
     }
 
     /* ── RESPONSIVE ── */
@@ -869,6 +1116,35 @@
         border-bottom: 1px solid var(--border-light);
       }
 
+      /* Dropdown becomes an inline accordion on mobile */
+      .nav-dropdown-toggle {
+        width: 100%;
+        justify-content: space-between;
+        padding: 12px 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .nav-dropdown-panel {
+        position: static;
+        min-width: 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+        padding: 4px 0 12px 16px;
+        background: transparent;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+
+      .nav-dropdown:hover .nav-dropdown-panel,
+      .nav-dropdown:focus-within .nav-dropdown-panel { display: none; }
+
+      .nav-dropdown.open .nav-dropdown-panel { display: block; }
+
+      #navbar .panel-item { border-bottom: none; padding: 10px 0 0; }
+
       .section-container, .hero-container {
         padding: 0 20px;
       }
@@ -931,38 +1207,9 @@
         padding: 0 20px;
       }
 
-      .brand-logos {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 30px;
-      }
-
-      .brand-logos img {
-        height: 60px !important;
-      }
-
-      .university-logos {
-        justify-content: center;
-        gap: 24px;
-      }
-
-      .uni-logo-item img {
-        max-width: 100%;
-      }
-
-      .university-logos .uni-logo-item img[alt="University of Oxford"],
-      .university-logos .uni-logo-item img[alt="MIT"],
-      .university-logos .uni-logo-item img[alt="Harvard University"] {
-        height: 80px !important;
-      }
-
-      .university-logos .uni-logo-item img[alt="Imperial College London"] {
-        height: 25px !important;
-      }
-
-      .university-logos .uni-logo-item img[alt="Yale University"] {
-        height: 35px !important;
-      }
+      .brand-marquee { margin-top: 26px; }
+      .brand-track { gap: 56px; }
+      .brand-track img { height: 56px; }
 
       .stats-grid {
         grid-template-columns: 1fr;
@@ -1008,6 +1255,9 @@
 
   <!-- ======= Hero Section ======= -->
   <section id="hero">
+    <div class="hero-field" aria-hidden="true">
+      <canvas class="hero-canvas"></canvas>
+    </div>
     <div class="hero-container">
       <div class="hero-grid">
         <div class="hero-text">
@@ -1115,36 +1365,15 @@
         <span class="banner-tag">Our Advantage</span>
         <h3 class="banner-title"><span class="highlight-line">Silicon Valley Expertise</span> Meets<br>Enterprise Scale</h3>
         <p class="banner-text"><span class="highlight-line">Born in Silicon Valley,</span> NERVE PLUS Inc bridges the gap between Silicon Valley agility and the rigorous demands of large-scale enterprise deployments. We <span class="highlight-line">bring deep tech engineering</span> and <span class="highlight-line">expertise to government agencies</span>, <span class="highlight-line">federal programs</span>, and <span class="highlight-line">Fortune 500</span> operations, delivering <span class="highlight-line">the cutting-edge</span> built for mission-critical environments with practicality at scale. Contact <a href="mailto:enterprise@nerveplusinc.com" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--border-light);transition:all 0.2s ease;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border-light)'">enterprise@nerveplusinc.com</a> to learn more of our <span class="highlight-line">successful</span> production deployments and maintenance <span style="color:var(--accent);text-decoration:underline;">*requires NDA for disclosure.</span></p>
-        <div class="brand-logos">
-          <a href="https://about.gitlab.com" target="_blank"><img src="brands/gitlab.png" alt="GitLab" style="height:180px;"></a>
-          <a href="https://www.energy.gov" target="_blank"><img src="brands/usdoe.png" alt="U.S. Department of Energy" style="height:110px;"></a>
-          <a href="https://www.ferc.gov" target="_blank"><img src="brands/ferc.jpg" alt="FERC" style="height:200px;"></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- ======= Brand Banner 2: Talent ======= -->
-    <div class="brand-banner">
-      <div class="banner-inner">
-        <span class="banner-tag">Our People</span>
-        <h3 class="banner-title"><span class="highlight-line">Elite Engineering Talent</span> From<br>The World's Best</h3>
-        <p class="banner-text"><span class="highlight-line">We exclusively recruit engineers from the world's top 10 universities.</span> Our team is built from the same talent pipeline that powers the world's most advanced technology applied for enterprise applications. All of whom are U.S. Citizens, with at least one post-baccalaureate advanced degree, and qualify for advanced government security clearances.</p>
-        <div class="university-logos">
-          <a class="uni-logo-item" href="https://www.ox.ac.uk" target="_blank">
-            <img src="brands/oxford.png" alt="University of Oxford" style="height:140px;">
-          </a>
-          <a class="uni-logo-item" href="https://www.mit.edu" target="_blank">
-            <img src="brands/mit.png" alt="MIT" style="height:140px;">
-          </a>
-          <a class="uni-logo-item" href="https://www.harvard.edu" target="_blank">
-            <img src="brands/harvard.png" alt="Harvard University" style="height:140px;">
-          </a>
-          <a class="uni-logo-item" href="https://www.imperial.ac.uk" target="_blank">
-            <img src="brands/imperial.png" alt="Imperial College London" style="height:40px;">
-          </a>
-          <a class="uni-logo-item" href="https://www.yale.edu" target="_blank">
-            <img src="brands/yale.png" alt="Yale University" style="height:80px;">
-          </a>
+        <div class="brand-marquee">
+          <div class="brand-track">
+            <a href="https://www.energy.gov" target="_blank" rel="noopener"><img src="brands/usdoe.png" alt="U.S. Department of Energy"></a>
+            <a href="https://www.ferc.gov" target="_blank" rel="noopener"><img src="brands/ferc.jpg" alt="FERC"></a>
+            <a href="https://about.gitlab.com" target="_blank" rel="noopener"><img src="brands/gitlab.png" alt="GitLab"></a>
+            <a href="https://www.energy.gov" target="_blank" rel="noopener"><img src="brands/usdoe.png" alt="U.S. Department of Energy"></a>
+            <a href="https://www.ferc.gov" target="_blank" rel="noopener"><img src="brands/ferc.jpg" alt="FERC"></a>
+            <a href="https://about.gitlab.com" target="_blank" rel="noopener"><img src="brands/gitlab.png" alt="GitLab"></a>
+          </div>
         </div>
       </div>
     </div>
@@ -1198,7 +1427,7 @@
         </div>
 
         <div class="cta-bar">
-          <a href="#contact" class="btn-outline-cta">Request Capabilities Brochure</a>
+          <a href="mailto:enterprise@nerveplusinc.com?subject=Capabilities%20brochure%20request&amp;body=Please%20send%20the%20NERVE%20PLUS%20capabilities%20brochure.%0A%0ACompany%3A%20%0ARole%3A%20%0AAreas%20of%20interest%3A%20%0A%0A%28AI%20%26%20machine%20learning%20%2F%2F%20infrastructure%20%2F%2F%20security%20%26%20compliance%20%2F%2F%20data%20%26%20analytics%29" class="btn-outline-cta">Request Capabilities Brochure</a>
         </div>
       </div>
     </section>
@@ -1243,6 +1472,7 @@
     <div class="footer-inner">
       <span class="footer-logo">Nerve Plus Inc</span>
       <div class="footer-links">
+        <a href="nerve-backend.html">Nerve Backend</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="#">Terms of Service</a>
       </div>
@@ -1251,10 +1481,18 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="assets/js/hero-caustics.js?v=17" defer></script>
   <script>
     // Header scroll behavior
     window.addEventListener('scroll', function() {
       document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    document.querySelector('.mobile-nav-toggle').addEventListener('click', function() {
+      document.getElementById('navbar').classList.toggle('open');
+      const icon = this.querySelector('i');
+      icon.classList.toggle('bi-list');
+      icon.classList.toggle('bi-x');
     });
 
     // Smooth scrolling
@@ -1279,13 +1517,6 @@
 
     document.querySelectorAll('.highlight-line, .section-rule').forEach(el => observer.observe(el));
 
-    // Mobile nav toggle
-    document.querySelector('.mobile-nav-toggle').addEventListener('click', function() {
-      document.getElementById('navbar').classList.toggle('open');
-      const icon = this.querySelector('i');
-      icon.classList.toggle('bi-list');
-      icon.classList.toggle('bi-x');
-    });
   </script>
 
 </body>
