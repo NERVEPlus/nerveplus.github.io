@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>NERVE PLUS INC | Nerve Backend</title>
+  <meta content="Nerve Backend, federal-grade backend infrastructure for small business and enterprise. Private endpoints, network isolation, and AI attack hardening across any cloud." name="description">
+  <meta content="Backend Infrastructure, Private Endpoints, VNet, VPC, NIST 800-171, FedRAMP, FISMA, AI Security, Azure, AWS, Google Cloud" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Bank Gothic fallback: Michroma is the closest free geometric match -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #0e0e0e;
+      --bg-card: #111111;
+      --border-heavy: #2a2a2a;
+      --border-light: #1e1e1e;
+      --accent: #5bb8f5;
+      --text-primary: #ffffff;
+      --text-secondary: #ffffff;
+      --text-muted: #888888;
+      --font-heading: 'Bank Gothic', 'BankGothic Md BT', 'Michroma', sans-serif;
+      --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-weight: 300;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    #header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 997;
+      background: var(--bg-primary);
+      border-bottom: 2px solid var(--border-heavy);
+      transition: all 0.3s ease;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #header.scrolled .header-inner {
+      padding: 14px 40px;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      letter-spacing: 0.2em;
+      color: var(--text-primary);
+      text-decoration: none;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .logo:hover { color: #ffffff; text-decoration: none; }
+
+    #navbar ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      gap: 8px;
+    }
+
+    /* Every nav item is the same kind of box.
+       The links were inline, so their vertical padding did not expand the line
+       box and the text sat at the top of a list item stretched to match the
+       taller dropdown button, which centres its own text. Same padding, same
+       border, different display, and the labels landed on two different
+       baselines. Making both inline-flex with an explicit line-height puts
+       them on one. */
+    #navbar a,
+    .nav-dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+      margin: 0;
+    }
+
+    #navbar a {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    #navbar a:hover,
+    #navbar a.active {
+      color: var(--accent);
+      border-color: var(--border-heavy);
+    }
+
+    /* ── PRODUCTS DROPDOWN ── */
+    .nav-dropdown { position: relative; }
+
+    .nav-dropdown-toggle {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: none;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-dropdown-toggle:hover,
+    .nav-dropdown-toggle.active,
+    .nav-dropdown:hover .nav-dropdown-toggle {
+      color: var(--accent);
+      border-color: var(--border-heavy);
+    }
+
+    .nav-chev {
+      width: 6px;
+      height: 6px;
+      border-right: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      transform: translateY(-1px) rotate(45deg);
+      transition: transform 0.2s ease;
+    }
+
+    .nav-dropdown:hover .nav-chev,
+    .nav-dropdown.open .nav-chev {
+      transform: translateY(1px) rotate(-135deg);
+    }
+
+    .nav-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      min-width: 340px;
+      background: var(--bg-card);
+      border: 2px solid var(--border-heavy);
+      padding: 24px 26px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: all 0.2s ease;
+      z-index: 998;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-panel,
+    .nav-dropdown:focus-within .nav-dropdown-panel,
+    .nav-dropdown.open .nav-dropdown-panel {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .panel-heading {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: block;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 6px;
+    }
+
+    #navbar .panel-item {
+      display: block;
+      padding: 14px 0 12px;
+      border: none;
+      border-bottom: 1px solid var(--border-light);
+      text-decoration: none;
+    }
+
+    #navbar .panel-item:last-child { border-bottom: none; }
+    #navbar .panel-item:hover { border-color: var(--border-light); }
+
+    .panel-item-name {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 6px;
+      transition: color 0.2s ease;
+    }
+
+    .panel-item-desc {
+      font-family: var(--font-body);
+      font-size: 13px;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text-muted);
+      display: block;
+      line-height: 1.6;
+    }
+
+    #navbar .panel-item:hover .panel-item-desc { color: var(--text-secondary); }
+
+    /* ── SECTIONS (shared) ── */
+    .section-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      margin-bottom: 60px;
+      position: relative;
+    }
+
+    .section-tag {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(24px, 3.5vw, 40px);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .section-rule {
+      height: 2px;
+      background: var(--border-light);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .section-rule::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 1.5s ease-out;
+    }
+
+    .section-rule.animate::after {
+      width: 80%;
+    }
+
+    .highlight-line {
+      color: var(--accent);
+      background-image: linear-gradient(var(--accent), var(--accent));
+      background-size: 0% 1px;
+      background-position: left bottom;
+      background-repeat: no-repeat;
+      padding-bottom: 2px;
+    }
+
+    .highlight-line.animate {
+      animation: underlineExpand 1.5s ease-out forwards;
+    }
+
+    @keyframes underlineExpand {
+      to { background-size: 100% 1px; }
+    }
+
+    .btn-primary-cta {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 18px 48px;
+      background: #ffffff;
+      color: #000000;
+      text-decoration: none;
+      border: 2px solid #ffffff;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary-cta:hover {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .btn-outline-cta {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 18px 48px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      text-decoration: none;
+      border: 2px solid var(--border-heavy);
+      display: inline-block;
+      transition: all 0.2s ease;
+      margin-left: 16px;
+    }
+
+    .btn-outline-cta:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-accent-cta {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 18px 48px;
+      background: var(--bg-card);
+      color: var(--accent);
+      text-decoration: none;
+      border: 2px solid var(--accent);
+      display: inline-block;
+      transition: all 0.2s ease;
+      margin-left: 16px;
+    }
+
+    .btn-accent-cta:hover {
+      background: var(--accent);
+      color: #04121d;
+    }
+
+    /* ── PAGE HERO ── */
+    #page-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 160px 0 100px;
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    .page-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 70px;
+      align-items: center;
+    }
+
+    .page-hero .section-tag {
+      font-size: 11px;
+      margin-bottom: 18px;
+    }
+
+    .page-hero h1 {
+      /* Soft halo, not a scrim: keeps white crisp on bright water
+         without putting a visible dark shape behind the text. */
+      text-shadow: 0 1px 18px rgba(0, 22, 38, 0.30), 0 1px 2px rgba(0, 22, 38, 0.22);
+      font-family: var(--font-heading);
+      font-size: clamp(38px, 6vw, 82px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.14;
+    }
+
+    .page-hero-rule {
+      height: 4px;
+      background: var(--accent);
+      margin: 34px 0;
+      box-shadow:
+        0 0 8px rgba(91, 184, 245, 0.9),
+        0 0 24px rgba(91, 184, 245, 0.7),
+        0 0 60px rgba(91, 184, 245, 0.5),
+        0 0 120px rgba(91, 184, 245, 0.3),
+        0 0 200px rgba(91, 184, 245, 0.15);
+      max-width: 700px;
+    }
+
+    .page-hero p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      max-width: 620px;
+    }
+
+    .page-hero-sub {
+      text-shadow: 0 1px 10px rgba(0, 22, 38, 0.40), 0 1px 2px rgba(0, 22, 38, 0.30);
+      font-family: var(--font-heading);
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      line-height: 2.1;
+    }
+
+    .page-hero-sub .sep {
+      /* White, not accent: bright water cannot carry #5bb8f5 at 4.5:1. */
+      color: #ffffff;
+      opacity: 0.75;
+      margin: 0 12px;
+    }
+
+    .page-hero .section-tag {
+      color: #ffffff; opacity: 0.9;
+      text-shadow: 0 1px 9px rgba(0, 22, 38, 0.42), 0 1px 2px rgba(0, 22, 38, 0.32);
+    }
+
+    .page-hero-sub .sub-item { white-space: nowrap; }
+
+    .page-hero-stats {
+      display: grid;
+      grid-template-rows: repeat(3, auto);
+      border: 2px solid var(--border-heavy);
+      min-width: 290px;
+      background: var(--bg-card);
+    }
+
+    .page-hero-stat {
+      padding: 32px 36px;
+      border-bottom: 1px solid var(--border-light);
+      text-align: center;
+    }
+
+    .page-hero-stat:last-child { border-bottom: none; }
+
+    .page-hero-stat .count-value {
+      font-family: var(--font-heading);
+      font-size: 30px;
+      color: #ffffff;
+      display: block;
+    }
+
+    .page-hero-stat .count-label {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── PRODUCT DETAIL ── */
+    .product-lede {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-bottom: 60px;
+    }
+
+    .product-lede p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .product-lede p:last-child { margin-bottom: 0; }
+
+    /* ── DELIVERABLES ── */
+    .deliverables {
+      border: 2px solid var(--border-heavy);
+      background: var(--bg-card);
+    }
+
+    .deliverables-head {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 20px 28px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-light);
+      color: #ffffff;
+    }
+
+    .deliverable-row {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      align-items: baseline;
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      transition: background 0.2s ease;
+    }
+
+    .deliverable-row:last-child { border-bottom: none; }
+    .deliverable-row:hover { background: #161616; }
+
+    .deliverable-num {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+    }
+
+    /* ── WHY IT MATTERS ── */
+    #why {
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+      margin-bottom: 40px;
+    }
+
+    .why-cell {
+      padding: 40px 36px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-card);
+      transition: background 0.2s ease;
+    }
+
+    .why-cell:last-child { border-right: none; }
+    .why-cell:hover { background: #161616; }
+
+    .why-num {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .why-cell h3 {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #ffffff;
+      line-height: 1.5;
+    }
+
+    .why-cell p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .why-contrast {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 2px solid var(--border-heavy);
+    }
+
+    .contrast-col {
+      padding: 34px 36px;
+      background: var(--bg-card);
+    }
+
+    .contrast-before { border-right: 1px solid var(--border-light); }
+    .contrast-after { background: #0d1418; }
+
+    .contrast-label {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-muted);
+    }
+
+    .contrast-after .contrast-label { color: var(--accent); }
+
+    .contrast-col ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .contrast-col li {
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 9px 0 9px 26px;
+      position: relative;
+      color: var(--text-muted);
+    }
+
+    .contrast-before li::before {
+      content: '\00d7';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      color: #6a6a6a;
+      font-size: 15px;
+    }
+
+    .contrast-after li {
+      color: var(--text-secondary);
+    }
+
+    .contrast-after li::before {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 15px;
+      width: 9px;
+      height: 5px;
+      border-left: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: rotate(-45deg);
+    }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+    }
+
+    .feature-cell {
+      padding: 40px 36px;
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      background: var(--bg-card);
+      transition: all 0.2s ease;
+    }
+
+    .feature-cell:nth-child(3n) { border-right: none; }
+    .feature-cell:nth-last-child(-n+3) { border-bottom: none; }
+    .feature-cell:hover { background: #161616; }
+
+    .feature-number {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .feature-divider {
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .feature-cell h3 {
+      font-family: var(--font-heading);
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .feature-cell p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    /* ── BLUEPRINTS ── */
+    #blueprints {
+      background: var(--bg-secondary);
+      border-top: 2px solid var(--border-heavy);
+    }
+
+    .bp-lede {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      max-width: 780px;
+      margin-bottom: 44px;
+    }
+
+    .bp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+      background: var(--bg-card);
+    }
+
+    /* Five cards in a three-wide grid leaves two on the last row. Letting them
+       stretch across the empty column reads as a mistake, so the last two are
+       given the width they would have had. */
+    .bp-cell {
+      padding: 32px 30px 30px 30px;
+      border-right: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bp-cell:nth-child(3n) { border-right: none; }
+    .bp-cell:nth-child(n+4) { border-bottom: none; }
+
+    .bp-num {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .bp-cell h3 {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .bp-tagline {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .bp-cell p {
+      font-size: 13.5px;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    .bp-pieces {
+      margin-top: auto;
+      padding-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .bp-piece {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-heavy);
+      padding: 5px 10px;
+    }
+
+    .bp-foot {
+      font-size: 13px;
+      color: #ffffff;
+      margin-top: 26px;
+      line-height: 1.8;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg-primary);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+    }
+
+    .contact-cell {
+      padding: 40px 36px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-card);
+    }
+
+    .contact-cell:last-child { border-right: none; }
+
+    .contact-cell h4 {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .contact-cell p {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .contact-cell a {
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-light);
+      transition: all 0.2s ease;
+    }
+
+    .contact-cell a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── DOWNLOAD ── */
+    #download {
+      background: var(--bg-secondary);
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    .download-lede {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      align-items: start;
+      margin-bottom: 50px;
+    }
+
+    .download-lede p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .download-lede p:last-child { margin-bottom: 0; }
+
+    .terminal {
+      border: 2px solid var(--border-heavy);
+      background: #08080a;
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .terminal-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--border-heavy);
+    }
+
+    .terminal-title {
+      font-family: var(--font-heading);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-left: 6px;
+    }
+
+    .terminal pre {
+      margin: 0;
+      padding: 22px 24px;
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.85;
+      color: #b9c6d2;
+      overflow-x: auto;
+    }
+
+    .terminal .c { color: #5f6b78; }
+    .terminal .p { color: var(--accent); }
+    .terminal .ok { color: #6fcf97; }
+
+    /* Platform picker */
+    .dl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 2px solid var(--border-heavy);
+      margin-bottom: 40px;
+    }
+
+    .dl-cell {
+      padding: 34px 30px;
+      border-right: 1px solid var(--border-light);
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s ease;
+    }
+
+    .dl-cell:last-child { border-right: none; }
+    .dl-cell:hover { background: #161616; }
+
+    .dl-os {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .dl-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      flex-grow: 1;
+    }
+
+    .dl-btn {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      background: #ffffff;
+      color: #000000;
+      text-decoration: none;
+      border: 2px solid #ffffff;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .dl-btn:hover {
+      background: transparent;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* Platform marks. Apple and Windows are the MIT Bootstrap Icons drawings;
+       the penguin is our own artwork rather than Larry Ewing's Tux, which
+       carries its own attribution requirement. Trademark is a separate question
+       from artwork licence and sits where CloudMark.cs already documents it. */
+    .dl-mark {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .dl-mark svg {
+      color: #ffffff;
+      display: block;
+      transition: color 0.2s ease;
+    }
+
+    .dl-cell:hover .dl-mark svg { color: var(--accent); }
+    .dl-mark svg .tux-body { fill: currentColor; }
+
+    .dl-btn .dl-size {
+      display: block;
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+      margin-top: 4px;
+      text-transform: none;
+    }
+
+    .dl-alt {
+      display: block;
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: var(--accent);
+      text-decoration: none;
+      text-align: center;
+    }
+
+    .dl-alt:hover { text-decoration: underline; }
+
+    .dl-verify {
+      font-size: 12.5px;
+      color: #ffffff;
+      margin-top: -22px;
+      margin-bottom: 40px;
+    }
+
+    .dl-verify a { color: var(--accent); text-decoration: none; }
+    .dl-verify a:hover { text-decoration: underline; }
+
+    /* Cloud connect strip */
+    .connect-strip {
+      border: 2px solid var(--border-heavy);
+      background: var(--bg-card);
+    }
+
+    .connect-head {
+      font-family: var(--font-heading);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #ffffff;
+      padding: 18px 26px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .connect-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .connect-cell {
+      padding: 26px;
+      border-right: 1px solid var(--border-light);
+      text-align: center;
+    }
+
+    .connect-cell:last-child { border-right: none; }
+
+    .connect-logo--aws { height: 46px !important; }
+
+    .connect-logo {
+      height: 34px;
+      width: auto;
+      display: block;
+      margin: 0 auto 14px auto;
+    }
+
+    .connect-name {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .connect-note {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .dl-footnote {
+      font-size: 13px;
+      color: #ffffff;
+      margin-top: 26px;
+      line-height: 1.8;
+    }
+
+    /* ── COMPLIANCE BANNER ── */
+    .brand-banner {
+      padding: 80px 0;
+      background: #050505;
+      border-bottom: 2px solid var(--border-heavy);
+    }
+
+    .banner-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .banner-tag {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .banner-title {
+      font-family: var(--font-heading);
+      font-size: clamp(22px, 3vw, 36px);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 20px;
+    }
+
+    .banner-text {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--text-secondary);
+      max-width: 800px;
+      margin-bottom: 0;
+    }
+
+    .framework-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 30px;
+    }
+
+    .framework-tag {
+      font-family: var(--font-heading);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border: 1px solid var(--border-heavy);
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .framework-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    #footer {
+      background: #050505;
+      color: #ffffff;
+      padding: 40px 0;
+      border-top: 2px solid var(--border-heavy);
+    }
+
+    .footer-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .footer-links a {
+      font-family: var(--font-heading);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #888888;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: #666666;
+    }
+
+    /* ── MOBILE NAV ── */
+    /* Drawn in CSS so the toggle never depends on an icon font loading. */
+    .mobile-nav-toggle {
+      display: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 6px;
+      width: 34px;
+      height: 30px;
+      position: relative;
+    }
+
+    .mobile-nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      margin: 4px auto;
+      transition: all 0.25s ease;
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-nav-toggle.is-open span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+
+    /* ── HERO SIGNAL FIELD (animated accent) ── */
+    .hero-field {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Slowly drifting network grid, masked so it never competes with the text */
+    .hero-field::before {
+      content: '';
+      position: absolute;
+      inset: -70px;
+      background-image:
+        linear-gradient(to right, rgba(91, 184, 245, 0.075) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(91, 184, 245, 0.075) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 62% 58% at 68% 45%, #000 0%, rgba(0,0,0,0.55) 45%, transparent 76%);
+      mask-image: radial-gradient(ellipse 62% 58% at 68% 45%, #000 0%, rgba(0,0,0,0.55) 45%, transparent 76%);
+      animation: gridDrift 26s linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes gridDrift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(64px, 64px, 0); }
+    }
+
+    /* Light blue scan beam sweeping down the hero */
+    .hero-field::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 220px;
+      background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(91, 184, 245, 0.045) 42%,
+        rgba(91, 184, 245, 0.11) 50%,
+        rgba(91, 184, 245, 0.045) 58%,
+        transparent 100%);
+      animation: scanSweep 11s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+      will-change: transform, opacity;
+    }
+
+    @keyframes scanSweep {
+      0%        { transform: translate3d(0, -240px, 0); opacity: 0; }
+      12%       { opacity: 1; }
+      82%       { opacity: 1; }
+      100%      { transform: translate3d(0, 120vh, 0); opacity: 0; }
+    }
+
+    /* Traveling pulse along the accent rule */
+    .hero-rule,
+    .page-hero-rule {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-rule::after,
+    .page-hero-rule::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 38%,
+        rgba(255, 255, 255, 0.95) 50%,
+        rgba(255, 255, 255, 0.15) 62%,
+        transparent 100%);
+      background-size: 220% 100%;
+      background-repeat: no-repeat;
+      animation: ruleSweep 6s ease-in-out infinite;
+    }
+
+    @keyframes ruleSweep {
+      0%        { background-position: -120% 0; }
+      65%, 100% { background-position: 220% 0; }
+    }
+
+    /* Breathing glow behind the accent rule */
+    @keyframes ruleBreathe {
+      0%, 100% { opacity: 0.75; }
+      50%      { opacity: 1; }
+    }
+
+    /* WebGL caustics layer */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .hero-field.is-webgl .hero-canvas { opacity: 0.92; }
+
+    /* WebGL supersedes the CSS grid + scan; never run both */
+    .hero-field.is-webgl::before,
+    .hero-field.is-webgl::after { display: none; }
+
+    /* Keep hero content above the field */
+    .hero-container,
+    .page-hero { position: relative; z-index: 1; width: 100%; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-field::before,
+      .hero-field::after,
+      .hero-rule::after,
+      .page-hero-rule::after { animation: none; }
+      .hero-field::after { opacity: 0; }
+      .hero-canvas { transition: none; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .page-hero-grid { grid-template-columns: 1fr; align-items: start; }
+      .product-lede { grid-template-columns: 1fr; gap: 40px; }
+      .feature-grid { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .why-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .why-cell:last-child { border-bottom: none; }
+      .feature-cell:nth-child(3n) { border-right: 1px solid var(--border-light); }
+      .feature-cell:nth-child(2n) { border-right: none; }
+      .feature-cell:nth-last-child(-n+3) { border-bottom: 1px solid var(--border-light); }
+      .feature-cell:nth-last-child(-n+2) { border-bottom: none; }
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { padding: 16px 20px; }
+      #header.scrolled .header-inner { padding: 12px 20px; }
+      .mobile-nav-toggle { display: block; }
+
+      #navbar {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-primary);
+        border-bottom: 2px solid var(--border-heavy);
+        padding: 20px;
+      }
+
+      #navbar.open { display: block; }
+      #navbar ul { flex-direction: column; gap: 0; }
+
+      #navbar a {
+        display: block;
+        padding: 12px 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      /* Dropdown becomes an inline accordion on mobile */
+      .nav-dropdown-toggle {
+        width: 100%;
+        justify-content: space-between;
+        padding: 12px 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .nav-dropdown-panel {
+        position: static;
+        min-width: 0;
+        border: none;
+        border-bottom: 1px solid var(--border-light);
+        padding: 4px 0 12px 16px;
+        background: transparent;
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+
+      .nav-dropdown:hover .nav-dropdown-panel,
+      .nav-dropdown:focus-within .nav-dropdown-panel { display: none; }
+
+      .nav-dropdown.open .nav-dropdown-panel { display: block; }
+
+      #navbar .panel-item { border-bottom: none; padding: 10px 0 0; }
+
+      .section-container, .banner-inner { padding: 0 20px; }
+      section { padding: 70px 0; }
+      #page-hero { min-height: 0; padding: 130px 0 70px; display: block; }
+      .brand-banner { padding: 50px 0; }
+
+      .feature-grid { grid-template-columns: 1fr; }
+      .why-grid, .why-contrast { grid-template-columns: 1fr; }
+      .download-lede, .dl-grid, .connect-row { grid-template-columns: 1fr; }
+      .bp-grid { grid-template-columns: 1fr; }
+      .bp-cell { border-right: none; border-bottom: 1px solid var(--border-light); }
+      .bp-cell:last-child { border-bottom: none; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-cell { border-right: none; border-bottom: 1px solid var(--border-light); }
+      .contact-cell:last-child { border-bottom: none; }
+      .dl-cell, .connect-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .dl-cell:last-child, .connect-cell:last-child { border-bottom: none; }
+      .why-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .why-cell:last-child { border-bottom: none; }
+      .contrast-before {
+        border-right: none;
+        border-bottom: 1px solid var(--border-light);
+      }
+      .feature-cell {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-light) !important;
+      }
+      .feature-cell:last-child { border-bottom: none !important; }
+      .deliverable-row { grid-template-columns: 40px 1fr; padding: 16px 20px; }
+      .deliverables-head { padding: 16px 20px; }
+
+      .btn-outline-cta,
+      .btn-accent-cta { margin-left: 0; margin-top: 12px; display: block; text-align: center; }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark"></span>
+        NERVE PLUS INC
+      </a>
+
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav id="navbar">
+        <ul>
+          <li><a href="index.html#services">Solutions</a></li>
+          <li class="nav-dropdown">
+            <button class="nav-dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
+              Flagship Products <span class="nav-chev"></span>
+            </button>
+            <div class="nav-dropdown-panel">
+              <span class="panel-heading">Infrastructure</span>
+              <a href="nerve-backend.html" class="panel-item">
+                <span class="panel-item-name">Nerve Backend</span>
+                <span class="panel-item-desc">Federal-grade backend infrastructure, deployed in your own cloud account</span>
+              </a>
+            </div>
+          </li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#capabilities">Capabilities</a></li>
+          <li><a href="docs.html">Docs</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======= Page Hero ======= -->
+  <section id="page-hero">
+    <div class="hero-field" aria-hidden="true">
+      <canvas class="hero-canvas"></canvas>
+    </div>
+    <div class="section-container page-hero">
+      <div class="page-hero-grid">
+        <div>
+          <span class="section-tag">Infrastructure</span>
+          <h1>Nerve<br>Backend</h1>
+          <div class="page-hero-rule"></div>
+          <p class="page-hero-sub"><span class="sub-item">Passes federal penetration testing</span> <span class="sep">//</span> <span class="sub-item">Hardened against AI attacks</span> <span class="sep">//</span> <span class="sub-item">Any cloud</span></p>
+          <div>
+            <a href="mailto:enterprise@nerveplusinc.com?subject=Nerve%20Backend%20architecture%20brief&amp;body=Send%20me%20the%20control%20mapping%20and%20architecture%20brief.%0A%0ACloud%20platform%3A%20%0ACompany%3A%20" class="btn-primary-cta">Get the Brief, Free</a>
+            <a href="#overview" class="btn-outline-cta">What You Get</a>
+            <a href="#download" class="btn-accent-cta">Download Now</a>
+          </div>
+        </div>
+
+        <div class="page-hero-stats">
+          <div class="page-hero-stat">
+            <span class="count-value">ZERO</span>
+            <span class="count-label">Public Data Plane</span>
+          </div>
+          <div class="page-hero-stat">
+            <span class="count-value">FEDERAL</span>
+            <span class="count-label">Pen Test Standards</span>
+          </div>
+          <div class="page-hero-stat">
+            <span class="count-value">AI</span>
+            <span class="count-label">Threat Hardened</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="main">
+
+    <!-- ======= Why It Matters ======= -->
+    <section id="why">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">The Standard It Is Held To</span>
+          <h2 class="section-title">Passes Federal Penetration Testing.<br>Hardened Against AI Attacks.</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-cell">
+            <span class="why-num">01</span>
+            <div class="feature-divider"></div>
+            <h3>Federal Penetration Testing Standards</h3>
+            <p>Most backends are assessed against whatever the team thought to check. This one is built to the penetration testing standards federal systems are held to, where an assessor actively tries to reach the data and the architecture either holds or it does not go live.</p>
+          </div>
+
+          <div class="why-cell">
+            <span class="why-num">02</span>
+            <div class="feature-divider"></div>
+            <h3>Hardened Against AI Attacks</h3>
+            <p>Attackers now run automated reconnaissance and exploitation at machine speed, and any model endpoint you expose is a new way in. Inference traffic is isolated from the data plane, model endpoints are locked down and bounded, and adversarial input paths are constrained by design.</p>
+          </div>
+
+          <div class="why-cell">
+            <span class="why-num">03</span>
+            <div class="feature-divider"></div>
+            <h3>Nothing Public to Attack</h3>
+            <p>The strongest result in a penetration test is a target the assessor cannot reach. Databases, storage, and internal APIs hold no public address, so most of what a test probes for does not exist on the network in the first place.</p>
+          </div>
+        </div>
+
+        <div class="why-contrast">
+          <div class="contrast-col contrast-before">
+            <span class="contrast-label">A Typical Backend Under Test</span>
+            <ul>
+              <li>Databases reachable from the internet</li>
+              <li>Flat network, one foothold reaches everything</li>
+              <li>Access rules added case by case over time</li>
+              <li>AI endpoints exposed like any other API</li>
+              <li>Findings discovered after launch</li>
+            </ul>
+          </div>
+          <div class="contrast-col contrast-after">
+            <span class="contrast-label">Nerve Backend Under Test</span>
+            <ul>
+              <li>Private endpoints only, no public data plane</li>
+              <li>Segmented tiers, blast radius contained</li>
+              <li>IP allowlisting enforced at every layer</li>
+              <li>Model endpoints isolated and bounded</li>
+              <li>Built to the standard before launch</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======= Download ======= -->
+    <section id="download">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Run It Yourself</span>
+          <h2 class="section-title">Download Today</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <div class="download-lede">
+          <div>
+            <p>Nerve Backend runs on your machine, not ours. Download it, point it at your own AWS, Azure, or Google Cloud account, and it deploys the hardened architecture directly into your environment.</p>
+            <p><span class="highlight-line">Your credentials never leave your device.</span> There is no account to create and nothing to upload. It reads the cloud profile already on your machine and talks to your provider directly.</p>
+            <p><span class="highlight-line">Read-only until you say otherwise.</span> It shows you every resource it would create, and the control each one satisfies, before it changes anything. What it deploys is infrastructure-as-code you keep and can rebuild without us.</p>
+          </div>
+
+          <div class="terminal">
+            <div class="terminal-bar">
+              <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
+              <span class="terminal-title">nerve-backend</span>
+            </div>
+<pre><span class="p">$</span> nerve-backend connect aws
+  <span class="ok">&#10003;</span> Using local profile <span class="c">(no credentials sent)</span>
+  <span class="ok">&#10003;</span> Read-only access verified
+
+<span class="p">$</span> nerve-backend plan
+  Network isolation ....... 14 resources
+  Private endpoints ....... 9 resources
+  Access restrictions ..... 7 resources
+  <span class="c">Nothing applied. Review above.</span>
+
+<span class="p">$</span> nerve-backend apply
+  <span class="ok">&#10003;</span> Deployed to your account
+  <span class="ok">&#10003;</span> Templates written to ./nerve-backend/</pre>
+          </div>
+        </div>
+
+        <div class="dl-grid">
+          <div class="dl-cell">
+            <span class="dl-mark"><svg width="42" height="42" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516.024.034 1.52.087 2.475-1.258.955-1.345.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422.212-2.189 1.675-2.789 1.698-2.854s-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758.347-.79.505-1.217.473-1.282"/></svg></span>
+            <span class="dl-os">macOS</span>
+            <span class="dl-meta">macOS 12 or later &middot; Apple silicon and Intel</span>
+            <a class="dl-btn" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/Nerve-0.1.0-macos-arm64.zip">Download<span class="dl-size">Apple silicon &middot; 17.3 MB</span></a>
+            <a class="dl-alt" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/Nerve-0.1.0-macos-x64.zip">Intel Mac &middot; 17.9 MB</a>
+          </div>
+          <div class="dl-cell">
+            <span class="dl-mark"><svg width="40" height="40" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.555 1.375 0 2.237v5.45h6.555zM0 13.795l6.555.933V8.313H0zm7.278-5.4.026 6.378L16 16V8.395zM16 0 7.33 1.244v6.414H16z"/></svg></span>
+            <span class="dl-os">Windows</span>
+            <span class="dl-meta">Windows 10 and 11 &middot; x64</span>
+            <a class="dl-btn" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/Nerve-0.1.0-windows-x64.zip">Download<span class="dl-size">x64 &middot; 16.9 MB</span></a>
+            <a class="dl-alt" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/SHA256SUMS.txt">Verify this download &middot; SHA-256</a>
+          </div>
+          <div class="dl-cell">
+            <span class="dl-mark"><svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><path class="tux-body" d="M12 1.4c-3.2 0-5.3 2.3-5.3 5.4 0 1.2.2 1.9 0 2.6-.3 1.3-1.9 2.8-2.7 4.9-.7 1.8-.9 3.4-.9 4.5 0 2.2 1.6 3.2 3.5 3.5 1.6.3 3.6.4 5.4.4s3.8-.1 5.4-.4c1.9-.3 3.5-1.3 3.5-3.5 0-1.1-.2-2.7-.9-4.5-.8-2.1-2.4-3.6-2.7-4.9-.2-.7 0-1.4 0-2.6 0-3.1-2.1-5.4-5.3-5.4z"/><path d="M12 11.2c2 0 3.4 1.6 4.1 3.4.5 1.5.7 2.9.7 3.9 0 1.5-2.2 2.2-4.8 2.2s-4.8-.7-4.8-2.2c0-1 .2-2.4.7-3.9.7-1.8 2.1-3.4 4.1-3.4z" fill="#111111"/><path d="M10.6 19.5c.7 0 1.1.4 1.1.9 0 .8-1 1.7-2.3 2.2-1.3.5-2.7.5-3-.1-.3-.6.6-1.4 1.9-2.1.8-.5 1.7-.9 2.3-.9z" fill="#f5a623"/><path d="M13.4 19.5c-.7 0-1.1.4-1.1.9 0 .8 1 1.7 2.3 2.2 1.3.5 2.7.5 3-.1.3-.6-.6-1.4-1.9-2.1-.8-.5-1.7-.9-2.3-.9z" fill="#f5a623"/><ellipse cx="10" cy="5.6" rx="1.5" ry="2" fill="#fff"/><ellipse cx="14" cy="5.6" rx="1.5" ry="2" fill="#fff"/><ellipse cx="10.35" cy="5.9" rx=".85" ry="1.2" fill="#111111"/><ellipse cx="13.65" cy="5.9" rx=".85" ry="1.2" fill="#111111"/><path d="M12 7.2c1.5 0 2.5.7 2.5 1.5 0 .8-1 1.5-2.5 1.5s-2.5-.7-2.5-1.5c0-.8 1-1.5 2.5-1.5z" fill="#f5a623"/></svg></span>
+            <span class="dl-os">Linux</span>
+            <span class="dl-meta">glibc desktop &middot; x86_64 and arm64</span>
+            <a class="dl-btn" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/Nerve-0.1.0-linux-x64.tar.gz">Download<span class="dl-size">x86_64 &middot; 15.4 MB</span></a>
+            <a class="dl-alt" href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/Nerve-0.1.0-linux-arm64.tar.gz">arm64 &middot; 14.8 MB</a>
+          </div>
+        </div>
+
+        <p class="dl-verify">Version 0.1.0 &middot; every build is self-contained, so there is no runtime to install first and no account to create. <a href="https://github.com/NERVEPlus/nerveplus.github.io/releases/download/v0.1.0/SHA256SUMS.txt">SHA-256 checksums</a> are published for all five artifacts.</p>
+
+        <div class="connect-strip">
+          <div class="connect-head">Connects To Your Own Cloud Account</div>
+          <div class="connect-row">
+            <div class="connect-cell">
+              <img class="connect-logo" src="assets/img/clouds/azure.png" alt="Microsoft Azure">
+              <span class="connect-name">Microsoft Azure</span>
+              <span class="connect-note">Uses your Azure CLI sign-in</span>
+            </div>
+            <div class="connect-cell">
+              <img class="connect-logo connect-logo--aws" src="assets/img/clouds/aws.png" alt="Amazon Web Services">
+              <span class="connect-name">Amazon Web Services</span>
+              <span class="connect-note">Reads your existing AWS profile or role</span>
+            </div>
+            <div class="connect-cell">
+              <img class="connect-logo" src="assets/img/clouds/gcp.png" alt="Google Cloud">
+              <span class="connect-name">Google Cloud</span>
+              <span class="connect-note">Uses your gcloud application credentials</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="dl-footnote">Runs entirely inside your boundary. Nerve Plus never receives your cloud credentials, your resource inventory, or your configuration.</p>
+      </div>
+    </section>
+
+    <!-- ======= Compliance Banner ======= -->
+    <div class="brand-banner">
+      <div class="banner-inner">
+        <span class="banner-tag">Provenance</span>
+        <h3 class="banner-title"><span class="highlight-line">Built Where "Looks Secure"</span><br>Was Never Good Enough.</h3>
+        <p class="banner-text">Federal programs do not approve an architecture because it reads well. It gets reviewed, tested, and signed off, or it does not go live. Nerve Backend is <span class="highlight-line">that same architecture</span>, taken out of that environment and packaged for businesses that want the result without the process. You deploy it into your own cloud account, you own the templates outright, and <span class="highlight-line">the decisions that normally take a specialist months are already made</span> and documented. The control mapping ships with the templates, in full, so you can judge the work before you ever talk to us.</p>
+        <div class="framework-tags">
+          <span class="framework-tag">NIST SP 800-171</span>
+          <span class="framework-tag">FedRAMP Ready</span>
+          <span class="framework-tag">FISMA</span>
+          <span class="framework-tag">Zero Trust</span>
+          <span class="framework-tag">AI Threat Hardened</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Blueprints ======= -->
+    <section id="blueprints">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Blueprints</span>
+          <h2 class="section-title">Pick A Shape, Not A Checklist</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <p class="bp-lede">Sign in with the cloud account you already have and Nerve opens on these.
+        Each one is a complete working backend in your own account &mdash; you pick the shape, then
+        whether it is reachable from the internet or closed to everything but the addresses you name.
+        <span class="highlight-line">Both are the same pieces.</span> The difference is four flags,
+        and you can move between them without a migration.</p>
+
+        <div class="bp-grid">
+          <div class="bp-cell">
+            <span class="bp-num">01</span>
+            <h3>Classic web application</h3>
+            <p class="bp-tagline">A site people visit, an API behind it, and somewhere to put the data</p>
+            <p>The usual shape: something public that people load, a private tier doing the work, scheduled and triggered jobs, a database and file storage. Pick this if you are not sure.</p>
+            <div class="bp-pieces">
+              <span class="bp-piece">Your private network</span>
+              <span class="bp-piece">The part people see</span>
+              <span class="bp-piece">The part that does the work</span>
+              <span class="bp-piece">Your function app</span>
+              <span class="bp-piece">Your database</span>
+              <span class="bp-piece">Your files</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">02</span>
+            <h3>API only</h3>
+            <p class="bp-tagline">No front end. Something else already owns that</p>
+            <p>For a mobile app, a partner integration, or a front end you host somewhere else entirely. Deliberately has no public web tier, so there is one less thing reachable from outside.</p>
+            <div class="bp-pieces">
+              <span class="bp-piece">Your private network</span>
+              <span class="bp-piece">The part that does the work</span>
+              <span class="bp-piece">Your database</span>
+              <span class="bp-piece">Your files</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">03</span>
+            <h3>Container platform</h3>
+            <p class="bp-tagline">You already build images and want somewhere to run them</p>
+            <p>A managed cluster with a private registry beside it. The control plane and the registry are both treated as data-grade rather than as infrastructure nobody looks at.</p>
+            <div class="bp-pieces">
+              <span class="bp-piece">Your private network</span>
+              <span class="bp-piece">Your container cluster</span>
+              <span class="bp-piece">Your image registry</span>
+              <span class="bp-piece">Your database</span>
+              <span class="bp-piece">Your files</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">04</span>
+            <h3>Event driven</h3>
+            <p class="bp-tagline">Work arrives, gets queued, and something picks it up</p>
+            <p>For ingestion, processing pipelines and anything bursty. No always-on web tier: the queue is the front door, and it is closed.</p>
+            <div class="bp-pieces">
+              <span class="bp-piece">Your private network</span>
+              <span class="bp-piece">Your queue</span>
+              <span class="bp-piece">Your function app</span>
+              <span class="bp-piece">Your database</span>
+              <span class="bp-piece">Your files</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">05</span>
+            <h3>AI and retrieval</h3>
+            <p class="bp-tagline">A model, an index of your documents, and the documents themselves</p>
+            <p>The retrieval stack, with all three parts closed rather than just the model. This is the shape that most often gets stood up outside IT and ends up holding the most sensitive material.</p>
+            <div class="bp-pieces">
+              <span class="bp-piece">Your private network</span>
+              <span class="bp-piece">Your AI service</span>
+              <span class="bp-piece">What the AI has been shown</span>
+              <span class="bp-piece">The documents it reads</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="bp-foot">Deploys today on Microsoft Azure. Amazon Web Services and Google Cloud are
+        read today and are an emitter away from deploying, because the blueprint itself contains no
+        provider names.</p>
+      </div>
+    </section>
+
+    <!-- ======= Overview ======= -->
+    <section id="overview">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">What It Is</span>
+          <h2 class="section-title">Security That Ships With The Stack</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <div class="product-lede">
+          <div>
+            <p><span class="highlight-line">Government-grade security.</span> Nerve Backend is the backend infrastructure architecture we built and deployed inside federal programs, packaged so any business can stand it up in its own environment.</p>
+            <p>Restricted IP ranges, private endpoints, and full virtual network configuration come pre-wired and validated against federal backend testing benchmarks. Not a checklist to work through after launch, but the starting state of the deployment.</p>
+            <p>The architecture is <span class="highlight-line">portable by design</span>. The same security model targets Azure, AWS, Google Cloud, or an open-source stack you host yourself, so the posture travels with you rather than locking you to one provider.</p>
+          </div>
+
+          <div class="deliverables">
+            <div class="deliverables-head">What You Receive</div>
+            <div class="deliverable-row"><span class="deliverable-num">01</span><span>Infrastructure-as-code templates targeting your platform</span></div>
+            <div class="deliverable-row"><span class="deliverable-num">02</span><span>Network architecture, documented and diagrammed</span></div>
+            <div class="deliverable-row"><span class="deliverable-num">03</span><span>Control mapping to the federal benchmarks it satisfies</span></div>
+            <div class="deliverable-row"><span class="deliverable-num">04</span><span>Deployment and validation runbook</span></div>
+            <div class="deliverable-row"><span class="deliverable-num">05</span><span>Handover, so your team owns and operates it</span></div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-cell">
+            <span class="feature-number">01</span>
+            <div class="feature-divider"></div>
+            <h3>Private Endpoints</h3>
+            <p>Databases, storage, and internal APIs are reachable only over private links. No service in the estate holds a public address that an attacker can enumerate.</p>
+          </div>
+
+          <div class="feature-cell">
+            <span class="feature-number">02</span>
+            <div class="feature-divider"></div>
+            <h3>Network Isolation</h3>
+            <p>Virtual network and subnet architecture with segmentation, security groups, and service endpoints configured to keep every tier separated by default.</p>
+          </div>
+
+          <div class="feature-cell">
+            <span class="feature-number">03</span>
+            <div class="feature-divider"></div>
+            <h3>Restricted IP Access</h3>
+            <p>Allowlisting enforced at the management plane, the data plane, and the deployment pipeline. Approved addresses reach the estate; nothing else does.</p>
+          </div>
+
+          <div class="feature-cell">
+            <span class="feature-number">04</span>
+            <div class="feature-divider"></div>
+            <h3>Federal Benchmarks</h3>
+            <p>Configurations mapped to NIST SP 800-171, FedRAMP, and FISMA control families, the same benchmarks that govern federal program infrastructure.</p>
+          </div>
+
+          <div class="feature-cell">
+            <span class="feature-number">05</span>
+            <div class="feature-divider"></div>
+            <h3>AI Attack Hardening</h3>
+            <p>Model endpoints locked down, inference traffic isolated from the general data plane, and adversarial input paths constrained so an AI surface cannot become the way in.</p>
+          </div>
+
+          <div class="feature-cell">
+            <span class="feature-number">06</span>
+            <div class="feature-divider"></div>
+            <h3>Reusable Architecture</h3>
+            <p>One security model, expressed as infrastructure-as-code per platform. Rebuild the estate from source, review it in version control, and redeploy it anywhere.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- ======= Contact ======= -->
+    <section id="contact">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Get in Touch</span>
+          <h2 class="section-title">Connect With Us</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-cell">
+            <h4>Headquarters</h4>
+            <p>NERVE PLUS Inc<br>
+            101 Jefferson Street, Floor 1<br>
+            Menlo Park, CA 94205</p>
+          </div>
+
+          <div class="contact-cell">
+            <h4>Federal Division</h4>
+            <p>1801 K Street NW<br>
+            Washington, DC 20006</p>
+          </div>
+
+          <div class="contact-cell">
+            <h4>Contact</h4>
+            <p>Enterprise Solutions<br>
+            <a href="mailto:enterprise@nerveplusinc.com">enterprise@nerveplusinc.com</a><br>
+            <a href="tel:+16506656100">+1 (650) 665-6100</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <span class="footer-logo">Nerve Plus Inc</span>
+      <div class="footer-links">
+        <a href="nerve-backend.html">Nerve Backend</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <span class="footer-copy">&copy; 2026 NERVE PLUS INC. All Rights Reserved.</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/hero-caustics.js?v=17" defer></script>
+  <script>
+    // Header scroll behavior
+    window.addEventListener('scroll', function() {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Smooth scrolling for same-page anchors
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Highlight underline animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.highlight-line, .section-rule').forEach(el => observer.observe(el));
+
+    // Mobile nav toggle
+    document.querySelector('.mobile-nav-toggle').addEventListener('click', function() {
+      const open = document.getElementById('navbar').classList.toggle('open');
+      this.classList.toggle('is-open', open);
+      this.setAttribute('aria-expanded', String(open));
+    });
+
+    // Products dropdown: click to toggle (touch devices and keyboard)
+    const dropdown = document.querySelector('.nav-dropdown');
+    if (dropdown) {
+      const ddToggle = dropdown.querySelector('.nav-dropdown-toggle');
+      ddToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const open = dropdown.classList.toggle('open');
+        ddToggle.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          ddToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+          ddToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Close the mobile menu after tapping a link
+    document.querySelectorAll('#navbar a').forEach(link => {
+      link.addEventListener('click', () => {
+        const nav = document.getElementById('navbar');
+        const toggle = document.querySelector('.mobile-nav-toggle');
+        nav.classList.remove('open');
+        toggle.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

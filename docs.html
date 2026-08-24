@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connecting NERVE Backend to your cloud — NERVE PLUS INC</title>
+<meta name="description" content="What NERVE Backend needs from AWS, Google Cloud and Azure, exactly what it reads, and what it will never ask for.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Michroma&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-primary:#0a0a0a; --bg-secondary:#0e0e0e; --bg-card:#111111;
+  --border-light:#1e1e1e; --border-heavy:#2a2a2a;
+  --text-primary:#ffffff; --text-muted:#888888;
+  --accent:#5bb8f5; --warn:#f5c65b; --bad:#f5765b; --ok:#5bf5a0;
+  --font-body:'Inter','Helvetica Neue',sans-serif;
+  --font-heading:'Bank Gothic','BankGothic Md BT','Michroma',sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-primary);color:var(--text-primary);
+  font-family:var(--font-body);font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border-light)}
+.bar{max-width:1180px;margin:0 auto;padding:18px 28px;display:flex;align-items:center;gap:28px}
+.mark{width:9px;height:9px;background:var(--accent);flex:none}
+.word{font-family:var(--font-heading);font-size:14px;letter-spacing:.22em;white-space:nowrap}
+.bar nav{margin-left:auto;display:flex;gap:26px;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
+.bar nav a{color:var(--text-muted)}
+.bar nav a:hover,.bar nav a.on{color:var(--text-primary);text-decoration:none}
+
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.hero{padding:78px 0 46px;border-bottom:1px solid var(--border-light)}
+.eyebrow{font-family:var(--font-heading);font-size:11px;letter-spacing:.3em;color:var(--accent);margin:0 0 18px}
+h1{font-family:var(--font-heading);font-size:clamp(30px,5vw,52px);line-height:1.12;margin:0 0 22px;font-weight:400}
+.lede{font-size:17px;color:#c9c9c9;max-width:60ch;margin:0}
+
+.layout{display:grid;grid-template-columns:230px 1fr;gap:52px;padding:44px 0 90px}
+@media(max-width:900px){.layout{grid-template-columns:1fr;gap:0}.toc{position:static!important;margin-bottom:34px}}
+.toc{position:sticky;top:96px;align-self:start;font-size:13.5px}
+.toc h4{font-family:var(--font-heading);font-size:10px;letter-spacing:.26em;color:var(--text-muted);
+  margin:0 0 12px;font-weight:400}
+.toc a{display:block;color:var(--text-muted);padding:6px 0;border-left:2px solid var(--border-light);padding-left:14px}
+.toc a:hover{color:var(--text-primary);border-left-color:var(--accent);text-decoration:none}
+
+section{scroll-margin-top:96px;margin-bottom:64px}
+h2{font-family:var(--font-heading);font-size:24px;font-weight:400;margin:0 0 8px;letter-spacing:.02em}
+h3{font-size:16px;font-weight:500;margin:34px 0 10px}
+p{margin:0 0 16px;max-width:70ch}
+.muted{color:var(--text-muted)}
+.rule{height:1px;background:var(--border-light);margin:0 0 26px}
+
+pre{background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:5px;
+  padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.6;
+  color:#d6d6d6;margin:0 0 18px}
+code{font-family:var(--mono);font-size:.92em;color:var(--accent);
+  background:rgba(91,184,245,.08);padding:1px 5px;border-radius:3px}
+pre code{background:none;padding:0;color:inherit}
+
+table{width:100%;border-collapse:collapse;margin:0 0 20px;font-size:13.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border-light);vertical-align:top}
+th{font-family:var(--font-heading);font-size:9.5px;letter-spacing:.2em;color:var(--text-muted);
+  font-weight:400;white-space:nowrap}
+td:first-child{white-space:nowrap;font-family:var(--mono);font-size:12px}
+
+.note{border-left:2px solid var(--accent);background:var(--bg-secondary);
+  padding:16px 20px;margin:0 0 22px;border-radius:0 5px 5px 0}
+.note.warn{border-left-color:var(--warn)}
+.note p:last-child{margin-bottom:0}
+.tag{font-family:var(--font-heading);font-size:9px;letter-spacing:.18em;padding:3px 8px;
+  border:1px solid currentColor;border-radius:3px;white-space:nowrap}
+.no{color:var(--bad)} .yes{color:var(--ok)}
+
+footer{border-top:1px solid var(--border-light);padding:34px 0;color:var(--text-muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <span class="mark"></span>
+    <span class="word">NERVE PLUS INC</span>
+    <nav>
+      <a href="index.html#services">Solutions</a>
+      <a href="nerve-backend.html">Nerve Backend</a>
+      <a href="docs.html" class="on">Docs</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">DOCUMENTATION</p>
+    <h1>Connecting NERVE Backend<br>to your cloud</h1>
+    <p class="lede">What Nerve needs from AWS, Google Cloud and Azure, the exact calls it makes,
+      and the things it will never ask you for. Read the section for your provider.</p>
+  </div>
+</div>
+
+<div class="wrap">
+<div class="layout">
+
+  <aside class="toc">
+    <h4>ON THIS PAGE</h4>
+    <a href="#how">How it connects</a>
+    <a href="#aws">Amazon Web Services</a>
+    <a href="#gcp">Google Cloud</a>
+    <a href="#azure">Microsoft Azure</a>
+    <a href="#never">What Nerve never does</a>
+    <a href="#trouble">When it cannot read something</a>
+  </aside>
+
+  <main>
+
+  <!-- ============================================================ -->
+  <section id="how">
+    <h2>How it connects</h2>
+    <div class="rule"></div>
+
+    <p>Nerve does not hold a credential of its own. It runs on your machine and uses the
+      command line tool you have already signed in to, which means three things follow.</p>
+
+    <p><strong>Nerve never sees your password.</strong> You sign in on Microsoft's, Amazon's or
+      Google's own domain. The token lives where that provider's CLI puts it, and Nerve reads
+      your account through the CLI rather than being handed a key.</p>
+
+    <p><strong>There is no Nerve server in the path.</strong> Nothing about your estate is sent
+      anywhere. The scan runs locally and the picture is drawn locally.</p>
+
+    <p><strong>Revoking access is the provider's job, not ours.</strong> Sign out of the CLI, or
+      remove the role, and Nerve can read nothing. There is no separate integration to
+      disconnect.</p>
+
+    <div class="note">
+      <p>Install the CLI for your provider before opening Nerve. If it is missing, Nerve will
+        tell you which one and the command that installs it, rather than failing silently.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="aws">
+    <h2>Amazon Web Services</h2>
+    <div class="rule"></div>
+
+    <h3>1. Install and sign in</h3>
+<pre><code>brew install awscli          # macOS
+winget install Amazon.AWSCLI # Windows
+
+aws configure sso            # or: aws configure
+aws sts get-caller-identity  # confirms you are signed in</code></pre>
+
+    <h3>2. Grant the permission</h3>
+    <p>Nerve reads configuration, never contents. The policy below is the complete set it uses;
+      attach it to the role or user you signed in as.</p>
+
+<pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "NetworkTopology",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeVpcs", "ec2:DescribeSubnets", "ec2:DescribeRouteTables",
+        "ec2:DescribeInternetGateways", "ec2:DescribeNatGateways",
+        "ec2:DescribeSecurityGroups", "ec2:DescribeSecurityGroupRules",
+        "ec2:DescribeNetworkAcls", "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeVpcEndpoints", "ec2:DescribeVpcPeeringConnections",
+        "ec2:DescribeAvailabilityZones", "ec2:DescribeRegions"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DataResourceExposure",
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBInstances", "rds:DescribeDBClusters",
+        "rds:DescribeDBSubnetGroups", "dynamodb:ListTables",
+        "dynamodb:DescribeTable", "elasticache:DescribeCacheClusters",
+        "redshift:DescribeClusters", "es:ListDomainNames",
+        "elasticfilesystem:DescribeFileSystems"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3ExposureConfigurationOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets", "s3:GetBucketLocation",
+        "s3:GetBucketPolicy", "s3:GetBucketPolicyStatus",
+        "s3:GetBucketPublicAccessBlock", "s3:GetEncryptionConfiguration",
+        "s3:GetAccountPublicAccessBlock"
+      ],
+      "Resource": "*"
+    }
+  ]
+}</code></pre>
+
+    <p class="muted">The application carries this policy verbatim, so what it asks for and what
+      is documented here cannot drift apart.</p>
+
+    <h3>Why not just use an AWS managed policy?</h3>
+    <p>This is the first question every reviewer asks, and the honest answer is that none of the
+      three obvious ones is right.</p>
+
+    <table>
+      <thead><tr><th>Managed policy</th><th></th><th>Why not</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ReadOnlyAccess</td><td><span class="tag no">NO</span></td>
+          <td>Grants <code>s3:GetObject</code> and <code>dynamodb:Scan</code>. That reads
+            <em>data</em>, not configuration. Nerve needs neither and will not ask for a policy
+            that includes them.</td>
+        </tr>
+        <tr>
+          <td>ViewOnlyAccess</td><td><span class="tag no">NO</span></td>
+          <td>Covers 38 of 69 calls. S3 and EFS discovery fail entirely, so the map has holes
+            exactly where data lives.</td>
+        </tr>
+        <tr>
+          <td>SecurityAudit</td><td><span class="tag no">NO</span></td>
+          <td>Covers 61 of 69, but includes full <code>iam:Get*</code> and <code>iam:List*</code>.
+            Nerve never reads IAM, and asking for it is what turns a one-day review into a
+            three-week one.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="gcp">
+    <h2>Google Cloud</h2>
+    <div class="rule"></div>
+
+    <h3>1. Install and sign in</h3>
+<pre><code>brew install --cask google-cloud-sdk   # macOS
+winget install Google.CloudSDK         # Windows
+
+gcloud auth login
+gcloud projects list                   # confirms you can enumerate</code></pre>
+
+    <div class="note warn">
+      <p>Nerve reads <strong>one project at a time</strong>. If your account holds more than one,
+        it asks which, and lists every project you did not pick as an unread part of the map
+        rather than leaving it off. An account with 74 projects and one scanned is not a clean
+        account, it is a picture of somewhere else.</p>
+    </div>
+
+    <h3>2. Grant the permission</h3>
+    <p>Project-level <code>roles/viewer</code> covers everything Nerve calls. To grant less than
+      that, these are the individual roles for the six things it reads:</p>
+
+    <table>
+      <thead><tr><th>Role</th><th>What it lets Nerve read</th></tr></thead>
+      <tbody>
+        <tr><td>roles/compute.networkViewer</td><td>VPC networks, subnets, firewall rules</td></tr>
+        <tr><td>roles/cloudsql.viewer</td><td>Cloud SQL instances and their public IP settings</td></tr>
+        <tr><td>roles/storage.legacyBucketReader</td><td>Bucket configuration and public access</td></tr>
+        <tr><td>roles/secretmanager.viewer</td><td>Which secrets exist, never their values</td></tr>
+        <tr><td>roles/run.viewer</td><td>Cloud Run services and their ingress settings</td></tr>
+        <tr><td>roles/redis.viewer</td><td>Memorystore instances</td></tr>
+      </tbody>
+    </table>
+
+<pre><code>gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="user:you@example.com" \
+  --role="roles/viewer"</code></pre>
+
+    <h3>What Nerve actually runs</h3>
+<pre><code>gcloud compute networks list --project PROJECT --format=json
+gcloud sql instances list   --project PROJECT --format=json
+gcloud storage buckets list --project PROJECT --format=json
+gcloud secrets list         --project PROJECT --format=json
+gcloud run services list    --project PROJECT --format=json
+gcloud redis instances list --region=- --project PROJECT --format=json</code></pre>
+
+    <p class="muted">Every call passes <code>--project</code> explicitly rather than relying on
+      whatever <code>gcloud config</code> is set to. The tool's current project is a machine
+      preference; the project you chose is a decision, and those are not the same thing.</p>
+
+    <div class="note warn">
+      <p><strong>BigQuery is not on the map.</strong> It is read with the <code>bq</code> tool
+        rather than <code>gcloud</code>, so Nerve lists it as a known gap instead of implying a
+        project has no warehouse. Nothing to do if you do not use BigQuery.</p>
+    </div>
+
+    <p class="muted">The roles above are derived from the calls Nerve makes, not from a
+      locked-down account we have tested against. If one is insufficient in your organisation,
+      Nerve will name the exact permission the API asked for.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="azure">
+    <h2>Microsoft Azure</h2>
+    <div class="rule"></div>
+
+    <h3>1. Install and sign in</h3>
+<pre><code>brew install azure-cli              # macOS
+winget install Microsoft.AzureCLI   # Windows
+
+az login
+az account show                     # confirms the subscription</code></pre>
+
+    <p>If your organisation requires a second factor, Nerve says so and runs the command Azure
+      asks for rather than failing with the provider's raw error.</p>
+
+    <h3>2. Grant the permission</h3>
+    <p>The built-in <strong>Reader</strong> role. Nothing custom, nothing to define, every call
+      an HTTP GET.</p>
+
+<pre><code>az role assignment create \
+  --assignee you@example.com \
+  --role "Reader" \
+  --scope /subscriptions/SUBSCRIPTION_ID</code></pre>
+
+    <p class="muted">Reader is role definition
+      <code>acdd72a7-3385-48ef-bd42-f606fba81ae7</code>. Its action set is literally
+      <code>["*/read"]</code>.</p>
+
+    <h3>What Reader buys you</h3>
+    <ul>
+      <li>Every VNet, subnet, NSG and its rules, route table, peering and service endpoint</li>
+      <li>Private endpoints, private link services, private DNS zones and their VNet links</li>
+      <li>SQL, Storage, Cosmos, Redis, Key Vault and App Service network configuration</li>
+      <li>Public exposure and the evidence for it, on every data resource</li>
+    </ul>
+
+    <h3>What it costs you</h3>
+    <p>NSG rules are read per-NSG and composed by Nerve, rather than asking Azure which rules
+      actually apply to a given interface. Where the composition is ambiguous, Nerve says so
+      rather than guessing.</p>
+
+    <h3>Optional: exact effective rules</h3>
+    <p>Two extra operations remove that ambiguity. Both are POSTs, and both mutate nothing.</p>
+
+<pre><code>Microsoft.Network/networkInterfaces/effectiveNetworkSecurityGroups/action
+Microsoft.Network/networkInterfaces/effectiveRouteTable/action</code></pre>
+
+    <p>With these, Nerve reports the rules Azure itself says apply to an interface, and the
+      effective routes, so "can this actually reach that" stops being an inference. Grant them
+      through a custom role alongside Reader. A reviewer reading an HTTP verb will see POST, so
+      it is worth saying up front that neither changes anything.</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="never">
+    <h2>What Nerve never does</h2>
+    <div class="rule"></div>
+
+    <p>This list is enforced by the application not containing the code, not by policy.</p>
+
+    <table>
+      <thead><tr><th>Never called</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>s3:GetObject</td>
+          <td>Reads object contents. Nerve needs a bucket's exposure, never its contents.</td></tr>
+        <tr><td>dynamodb:Scan</td>
+          <td>Reads table contents. Same reasoning.</td></tr>
+        <tr><td>iam:Get*, iam:List*</td>
+          <td>Nerve does not map identity. Requesting it stalls reviews for no benefit.</td></tr>
+        <tr><td>ec2:CreateFlowLogs</td>
+          <td>A mutation. Flow logs would improve the analysis and Nerve will not turn them on.</td></tr>
+        <tr><td>resource-explorer-2:*</td>
+          <td>Its complete-results path <em>creates an index</em> as a side effect of searching. A
+            discovery tool that provisions infrastructure while looking around is not read-only,
+            whatever the verb is called.</td></tr>
+        <tr><td>*:Create*, *:Update*, *:Delete*, *:Put*</td>
+          <td>Nerve contains no code path that mutates anything during discovery.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <p><strong>The one exception, and it is explicit.</strong> Pressing <em>Build this
+        backend</em> and then <em>Build it</em> creates real resources in your account and bills
+        to whoever owns the subscription. Everything up to and including the preview changes
+        nothing. The preview is generated without contacting your provider's control plane at
+        all.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <section id="trouble">
+    <h2>When it cannot read something</h2>
+    <div class="rule"></div>
+
+    <p>Nerve draws what it could not read as a hole in the map, next to what it could. A picture
+      with a quiet gap in it is more dangerous than no picture, because you will believe the
+      missing part was clean.</p>
+
+    <table>
+      <thead><tr><th>It says</th><th>It means</th></tr></thead>
+      <tbody>
+        <tr><td>You are not allowed to read this</td>
+          <td>The permission above is missing for that service. Grant it and rescan.</td></tr>
+        <tr><td>Not in use in this account</td>
+          <td>The API is not enabled. Nothing to do if you do not use that service.</td></tr>
+        <tr><td>The cloud asked us to slow down</td>
+          <td>Throttled. Rescan in a few minutes.</td></tr>
+        <tr><td>This tool cannot read it yet</td>
+          <td>A known gap, such as BigQuery. Listed rather than omitted.</td></tr>
+        <tr><td>You picked a different one</td>
+          <td>Another subscription, project or region you own and did not scan. Not a failure.</td></tr>
+      </tbody>
+    </table>
+
+    <p>An empty list and a refused question are never collapsed into one answer. "You have
+      nothing here" and "I could not look" are different sentences, and Nerve will always tell
+      you which one it means.</p>
+  </section>
+
+  </main>
+</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    © 2026 NERVE PLUS INC · <a href="nerve-backend.html">Nerve Backend</a> ·
+    <a href="privacy.html">Privacy</a>
+  </div>
+</footer>
+
+</body>
+</html>
