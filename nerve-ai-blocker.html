@@ -1393,6 +1393,69 @@
       .logo { font-size: 17px; letter-spacing: 0.16em; }
     }
 
+    /* ── HERO WIPE ── */
+    /* The same left-to-right reveal the home page hero uses. It only ever
+       existed there, so the product heroes appeared instantly and the three
+       pages did not feel like the same site.
+       Staggered in the order the eye reads: tag, name, rule, subline, buttons,
+       stats. forwards, so each element holds its finished state rather than
+       snapping back. */
+    @keyframes textWipeFade {
+      0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+      15%  { opacity: 1; }
+      100% { clip-path: inset(0 0% 0 0);   opacity: 1; }
+    }
+
+    .page-hero .section-tag {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+    }
+
+    .page-hero h1 {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    }
+
+    .page-hero-rule {
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+    }
+
+    .page-hero-sub {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s forwards;
+    }
+
+    .hero-actions {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
+    }
+
+    .page-hero-stats {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+      animation: textWipeFade 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.8s forwards;
+    }
+
+    /* Anyone who has asked for less motion gets the finished state, not a
+       hidden hero. Without this, animation:none leaves opacity at 0. */
+    @media (prefers-reduced-motion: reduce) {
+      .page-hero .section-tag,
+      .page-hero h1,
+      .page-hero-rule,
+      .page-hero-sub,
+      .hero-actions,
+      .page-hero-stats {
+        animation: none;
+        clip-path: none;
+        opacity: 1;
+      }
+    }
+
     /* ── NARROW SCREENS ── */
     /* A grid track defaults to min-width:auto, so one unbreakable word wider
        than the column pushes the whole grid past the viewport and drags the
