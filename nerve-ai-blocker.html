@@ -207,7 +207,7 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--text-primary);
       display: block;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border-light);
@@ -1358,6 +1358,46 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* ── NARROW SCREENS ── */
+    /* A grid track defaults to min-width:auto, so one unbreakable word wider
+       than the column pushes the whole grid past the viewport and drags the
+       page with it. That is what put the header off screen on a phone: the
+       document became 410px wide, so the hamburger sat beyond the right edge.
+       Letting the tracks shrink is the fix; the smaller type is what keeps the
+       longest word inside them. */
+    .hero-grid > *,
+    .hero-text,
+    .page-hero-grid > * { min-width: 0; }
+
+    .hero-text h1,
+    .page-hero h1 { overflow-wrap: break-word; }
+
+    @media (max-width: 560px) {
+      /* The subline is three phrases separated by slashes. On a phone they
+         stack; the separators only make sense on one line. */
+      .page-hero-sub .sep { display: none; }
+      /* nowrap keeps the three phrases whole on one line at desktop; on a
+         phone it is what clips the longest of them. */
+      .page-hero-sub .sub-item { display: block; white-space: normal; }
+      .page-hero-sub { line-height: 1.7; margin-bottom: 32px; }
+
+      /* Same grid trap as the hero: a wide child in an auto-sized track drags
+         the page out. The diagram keeps its own horizontal scroll. */
+      .demo-split > *, .download-lede, .download-lede > * { min-width: 0; }
+      .download-lede { grid-template-columns: 1fr !important; }
+      .nm-wrap { max-width: 100%; }
+      .terminal pre { font-size: 11px; }
+    }
+
+    @media (max-width: 560px) {
+      .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em; }
+      .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em; }
+      .hero-subtitle, .page-hero-sub { font-size: 12px; letter-spacing: 0.12em; }
+      .btn-primary-cta, .btn-outline-cta, .btn-accent-cta {
+        display: block; width: 100%; text-align: center; margin: 0 0 10px 0;
+      }
+    }
+
     @media (max-width: 1024px) {
       .page-hero-grid { grid-template-columns: 1fr; align-items: start; }
       .product-lede { grid-template-columns: 1fr; gap: 40px; }
@@ -1374,7 +1414,7 @@
       .feature-cell:nth-last-child(-n+2) { border-bottom: none; }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       .header-inner { padding: 16px 20px; }
       #header.scrolled .header-inner { padding: 12px 20px; }
       .mobile-nav-toggle { display: block; }
@@ -1486,7 +1526,7 @@
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html#hero" class="logo">
         <span class="logo-mark"></span>
         NERVE PLUS INC
       </a>
@@ -1497,7 +1537,9 @@
 
       <nav id="navbar">
         <ul>
+          <li><a href="index.html#hero">Home</a></li>
           <li><a href="index.html#services">Solutions</a></li>
+          <li><a href="index.html#about">About</a></li>
           <li class="nav-dropdown">
             <button class="nav-dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
               Flagship Products <span class="nav-chev"></span>
@@ -1519,7 +1561,6 @@
               </a>
             </div>
           </li>
-          <li><a href="index.html#about">About</a></li>
           <li><a href="index.html#capabilities">Capabilities</a></li>
           <li><a href="docs.html">Docs</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -1538,7 +1579,7 @@
           <span class="section-tag">Security</span>
           <h1>Nerve<br>AI Blocker</h1>
           <div class="page-hero-rule"></div>
-          <p class="page-hero-sub"><span class="sub-item">Attacks run at machine speed</span> <span class="sep">//</span> <span class="sub-item">Your model is a way in</span> <span class="sep">//</span> <span class="sub-item">Remove the surface, not the symptom</span></p>
+          <p class="page-hero-sub"><span class="sub-item">Hardened against AI attacks</span> <span class="sep">//</span> <span class="sub-item">No public endpoint to reach</span> <span class="sep">//</span> <span class="sub-item">Model, index and documents closed</span></p>
           <div>
             <a href="mailto:enterprise@nerveplusinc.com?subject=Nerve%20AI%20Blocker%20%E2%80%94%20architecture%20brief&amp;body=Hello%2C%0A%0APlease%20send%20the%20Nerve%20AI%20Blocker%20architecture%20brief%20and%20the%20control%20mapping.%0A%0A%20%20Company%3A%0A%20%20Cloud%20provider%3A%20%20Azure%20%2F%20AWS%20%2F%20Google%20Cloud%0A%20%20What%20we%20run%20today%3A%0A%20%20What%20we%20are%20reviewing%20against%3A%20%20NIST%20800-171%20%2F%20FedRAMP%20%2F%20FISMA%20%2F%20other%0A%0AThank%20you%2C%0A" class="btn-primary-cta">Get the Brief, Free</a>
             <a href="#overview" class="btn-outline-cta">What You Get</a>

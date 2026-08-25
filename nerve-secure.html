@@ -207,7 +207,7 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--text-primary);
       display: block;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border-light);
@@ -1531,6 +1531,46 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* ── NARROW SCREENS ── */
+    /* A grid track defaults to min-width:auto, so one unbreakable word wider
+       than the column pushes the whole grid past the viewport and drags the
+       page with it. That is what put the header off screen on a phone: the
+       document became 410px wide, so the hamburger sat beyond the right edge.
+       Letting the tracks shrink is the fix; the smaller type is what keeps the
+       longest word inside them. */
+    .hero-grid > *,
+    .hero-text,
+    .page-hero-grid > * { min-width: 0; }
+
+    .hero-text h1,
+    .page-hero h1 { overflow-wrap: break-word; }
+
+    @media (max-width: 560px) {
+      /* The subline is three phrases separated by slashes. On a phone they
+         stack; the separators only make sense on one line. */
+      .page-hero-sub .sep { display: none; }
+      /* nowrap keeps the three phrases whole on one line at desktop; on a
+         phone it is what clips the longest of them. */
+      .page-hero-sub .sub-item { display: block; white-space: normal; }
+      .page-hero-sub { line-height: 1.7; margin-bottom: 32px; }
+
+      /* Same grid trap as the hero: a wide child in an auto-sized track drags
+         the page out. The diagram keeps its own horizontal scroll. */
+      .demo-split > *, .download-lede, .download-lede > * { min-width: 0; }
+      .download-lede { grid-template-columns: 1fr !important; }
+      .nm-wrap { max-width: 100%; }
+      .terminal pre { font-size: 11px; }
+    }
+
+    @media (max-width: 560px) {
+      .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em; }
+      .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em; }
+      .hero-subtitle, .page-hero-sub { font-size: 12px; letter-spacing: 0.12em; }
+      .btn-primary-cta, .btn-outline-cta, .btn-accent-cta {
+        display: block; width: 100%; text-align: center; margin: 0 0 10px 0;
+      }
+    }
+
     @media (max-width: 1024px) {
       .page-hero-grid { grid-template-columns: 1fr; align-items: start; }
       .product-lede { grid-template-columns: 1fr; gap: 40px; }
@@ -1547,7 +1587,7 @@
       .feature-cell:nth-last-child(-n+2) { border-bottom: none; }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       .header-inner { padding: 16px 20px; }
       #header.scrolled .header-inner { padding: 12px 20px; }
       .mobile-nav-toggle { display: block; }
@@ -1659,7 +1699,7 @@
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html#hero" class="logo">
         <span class="logo-mark"></span>
         NERVE PLUS INC
       </a>
@@ -1670,7 +1710,9 @@
 
       <nav id="navbar">
         <ul>
+          <li><a href="index.html#hero">Home</a></li>
           <li><a href="index.html#services">Solutions</a></li>
+          <li><a href="index.html#about">About</a></li>
           <li class="nav-dropdown">
             <button class="nav-dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
               Flagship Products <span class="nav-chev"></span>
@@ -1692,7 +1734,6 @@
               </a>
             </div>
           </li>
-          <li><a href="index.html#about">About</a></li>
           <li><a href="index.html#capabilities">Capabilities</a></li>
           <li><a href="docs.html">Docs</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -1714,7 +1755,7 @@
           <p class="page-hero-sub"><span class="sub-item">A library of backend architectures</span> <span class="sep">//</span> <span class="sub-item">Configured, not hand-built</span> <span class="sep">//</span> <span class="sub-item">Deployed in a single day</span></p>
           <div>
             <a href="mailto:enterprise@nerveplusinc.com?subject=Nerve%20Secure%20%E2%80%94%20architecture%20brief&amp;body=Hello%2C%0A%0APlease%20send%20the%20Nerve%20Secure%20architecture%20brief%20and%20the%20control%20mapping.%0A%0A%20%20Company%3A%0A%20%20Cloud%20provider%3A%20%20Azure%20%2F%20AWS%20%2F%20Google%20Cloud%0A%20%20What%20we%20run%20today%3A%0A%20%20What%20we%20are%20reviewing%20against%3A%20%20NIST%20800-171%20%2F%20FedRAMP%20%2F%20FISMA%20%2F%20other%0A%0AThank%20you%2C%0A" class="btn-primary-cta">Get the Brief, Free</a>
-            <a href="#blueprints" class="btn-outline-cta">See The Library</a>
+            <a href="#download" class="btn-outline-cta">See The Architecture</a>
             <a href="#download" class="btn-accent-cta">Request a Demo</a>
           </div>
         </div>
@@ -1794,58 +1835,11 @@
           </div>
         </div>
 
-        <p class="demo-foot">Addresses are the defaults: a /16 for the network and a /24 for each subnet. The peering to
-        your own hub and whatever sits behind it are yours, and are shown dashed because Nerve does not create them.</p>
+        <p class="demo-foot">A worked example, using the classic web application from the library and the default addresses: a /16 for the network and a /24 for each subnet. Your own shape decides the pieces on the left; the way they attach to the network is the same for all five. Peering to a network you already run is shown dashed because Nerve does not create it.</p>
       </div>
     </section>
 
-    <!-- ======= The Library ======= -->
-    <section id="blueprints">
-      <div class="section-container">
-        <div class="section-header">
-          <span class="section-tag">The Library</span>
-          <h2 class="section-title">Five Architectures, One Posture</h2>
-          <div class="section-rule"></div>
-        </div>
-
-        <p class="bp-lede">Pick the shape you are actually building. The posture applies to all five equally, so the
-        security tier is not a different product with a different architecture &mdash; it is
-        <span class="highlight-line">the same library with the network closed</span>.</p>
-
-        <div class="lib-strip">
-          <div class="lib-item">
-            <span class="lib-num">01</span>
-            <span class="lib-name">Classic web application</span>
-            <span class="lib-pieces">Frontend web app &#183; Backend web app &#183; Function app &#183; Relational database &#183; Storage account</span>
-          </div>
-          <div class="lib-item">
-            <span class="lib-num">02</span>
-            <span class="lib-name">API only</span>
-            <span class="lib-pieces">Backend web app &#183; Relational database &#183; Storage account</span>
-          </div>
-          <div class="lib-item">
-            <span class="lib-num">03</span>
-            <span class="lib-name">Container platform</span>
-            <span class="lib-pieces">Container cluster &#183; Image registry &#183; Relational database &#183; Storage account</span>
-          </div>
-          <div class="lib-item">
-            <span class="lib-num">04</span>
-            <span class="lib-name">Event driven</span>
-            <span class="lib-pieces">Message queue &#183; Function app &#183; Relational database &#183; Storage account</span>
-          </div>
-          <div class="lib-item">
-            <span class="lib-num">05</span>
-            <span class="lib-name">AI and retrieval</span>
-            <span class="lib-pieces">AI model endpoint &#183; Search index &#183; Document store</span>
-          </div>
-        </div>
-
-        <p class="bp-foot">Deploys today on Microsoft Azure. Amazon Web Services and Google Cloud are read today and are
-        an emitter away from deploying, because the architectures themselves contain no provider names.</p>
-      </div>
-    </section>
-
-    <!-- ======= Request a Demo, beside what it builds ======= -->
+        <!-- ======= Request a Demo, beside what it builds ======= -->
     <section id="download">
       <div class="section-container">
         <div class="section-header">
@@ -1904,7 +1898,7 @@
         <p class="nm-lede">Once that is in place the service itself can refuse every public address, because the
         application no longer reaches it over the internet. <span class="highlight-line">Every architecture in the library emits this same posture</span>. The pieces on the left change with the shape you pick; the way they attach to the network does not.</p>
         <div class="nm-wrap">
-    <svg class="nm2-svg" viewBox="0 0 1400 700" role="img" aria-label="Each service reaches the network through a private endpoint, the endpoint sits in a subnet, and the subnet attaches to the virtual network.">
+    <svg class="nm2-svg" viewBox="0 0 1240 640" role="img" aria-label="Each service reaches the network through a private endpoint, the endpoint sits in a subnet, and the subnet attaches to the virtual network.">
       <defs>
         <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 z" fill="#8d8d8d"/>
@@ -1943,72 +1937,60 @@
       </defs>
       <rect x="24" y="60" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
       <text class="nm2-name" x="99.0" y="88" text-anchor="middle">Frontend</text>
-      <text class="nm2-name" x="99.0" y="104" text-anchor="middle">Web app</text>
+      <text class="nm2-name" x="99.0" y="104" text-anchor="middle">web app</text>
       <line x1="174" y1="91" x2="216" y2="91" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
       <use href="#pe" x="226" y="71"/>
       <rect x="24" y="144" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
       <text class="nm2-name" x="99.0" y="172" text-anchor="middle">Backend</text>
-      <text class="nm2-name" x="99.0" y="188" text-anchor="middle">Web app</text>
+      <text class="nm2-name" x="99.0" y="188" text-anchor="middle">web app</text>
       <line x1="174" y1="175" x2="216" y2="175" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
       <use href="#pe" x="226" y="155"/>
       <rect x="24" y="228" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="99.0" y="264" text-anchor="middle">Function App</text>
+      <text class="nm2-name" x="99.0" y="264" text-anchor="middle">Function app</text>
       <line x1="174" y1="259" x2="216" y2="259" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
       <use href="#pe" x="226" y="239"/>
-      <rect x="24" y="380" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="99.0" y="416" text-anchor="middle">CosmosDB</text>
-      <line x1="174" y1="411" x2="216" y2="411" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
-      <use href="#pe" x="226" y="391"/>
-      <rect x="24" y="464" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="99.0" y="500" text-anchor="middle">OpenAI Foundry</text>
-      <line x1="174" y1="495" x2="216" y2="495" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
-      <use href="#pe" x="226" y="475"/>
-      <rect x="24" y="548" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="99.0" y="576" text-anchor="middle">Document</text>
-      <text class="nm2-name" x="99.0" y="592" text-anchor="middle">Intelligence</text>
-      <line x1="174" y1="579" x2="216" y2="579" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
-      <use href="#pe" x="226" y="559"/>
-      <rect x="24" y="632" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="99.0" y="660" text-anchor="middle">Storage</text>
-      <text class="nm2-name" x="99.0" y="676" text-anchor="middle">Account</text>
-      <line x1="174" y1="663" x2="216" y2="663" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
-      <use href="#pe" x="226" y="643"/>
+      <rect x="24" y="400" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
+      <text class="nm2-name" x="99.0" y="428" text-anchor="middle">Relational</text>
+      <text class="nm2-name" x="99.0" y="444" text-anchor="middle">database</text>
+      <line x1="174" y1="431" x2="216" y2="431" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
+      <use href="#pe" x="226" y="411"/>
+      <rect x="24" y="484" width="150" height="62" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
+      <text class="nm2-name" x="99.0" y="512" text-anchor="middle">Storage</text>
+      <text class="nm2-name" x="99.0" y="528" text-anchor="middle">account</text>
+      <line x1="174" y1="515" x2="216" y2="515" stroke="#8d8d8d" stroke-width="1.5" marker-end="url(#ar)"/>
+      <use href="#pe" x="226" y="495"/>
       <path d="M276 91 H338.0 V145 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
       <path d="M276 175 H338.0 V145 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
       <path d="M276 259 H338.0 V145 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
       <use href="#subnet" x="400" y="123"/>
-      <path d="M276 411 H338.0 V465 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
-      <path d="M276 495 H338.0 V465 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
-      <path d="M276 579 H338.0 V465 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
-      <path d="M276 663 H338.0 V465 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
-      <use href="#subnet" x="400" y="443"/>
+      <path d="M276 431 H338.0 V442 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
+      <path d="M276 515 H338.0 V442 H400" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
+      <use href="#subnet" x="400" y="420"/>
       <rect x="370" y="177" width="220" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
       <text class="nm2-tag" x="480.0" y="196" text-anchor="middle">Subnet: snet-app &#183; 10.20.1.0/24</text>
-      <rect x="370" y="497" width="220" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
-      <text class="nm2-tag" x="480.0" y="516" text-anchor="middle">Subnet: snet-pe &#183; 10.20.2.0/24</text>
+      <rect x="370" y="474" width="220" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
+      <text class="nm2-tag" x="480.0" y="493" text-anchor="middle">Subnet: snet-pe &#183; 10.20.2.0/24</text>
       <path d="M458 145 H579.0 V305 H700" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
-      <path d="M458 465 H579.0 V305 H700" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
+      <path d="M458 442 H579.0 V305 H700" fill="none" stroke="#8d8d8d" stroke-width="1.5"/>
       <use href="#vnet" x="700" y="285"/>
       <rect x="668" y="339" width="220" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
       <text class="nm2-tag" x="778.0" y="358" text-anchor="middle">VNET: vnet-acme &#183; 10.20.0.0/16</text>
-      <line x1="772" y1="305" x2="940" y2="305" stroke="#8d8d8d" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ar)"/>
-      <use href="#vnet" x="940" y="285"/>
-      <rect x="910" y="339" width="200" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
-      <text class="nm2-tag" x="1010.0" y="358" text-anchor="middle">VNET: your hub</text>
-      <line x1="1012" y1="305" x2="1120" y2="305" stroke="#8d8d8d" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ar)"/>
-      <rect x="1120" y="273" width="170" height="64" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.6"/>
-      <text class="nm2-name" x="1205.0" y="310" text-anchor="middle">On-prem firewall</text>
-      <rect x="640" y="40" width="330" height="118" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
-      <text class="nm2-note" x="805" y="72" text-anchor="middle">Private endpoints attach to the virtual</text>
-      <text class="nm2-note" x="805" y="92" text-anchor="middle">network through subnets. Each one is a</text>
-      <text class="nm2-note" x="805" y="112" text-anchor="middle">network interface holding a private</text>
-      <text class="nm2-note" x="805" y="132" text-anchor="middle">address from the subnet it sits in.</text>
-      <rect x="1000" y="520" width="360" height="138" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
-      <text class="nm2-note" x="1180" y="554" text-anchor="middle">Every service on the left has restricted IP</text>
-      <text class="nm2-note" x="1180" y="574" text-anchor="middle">addresses and no public route at all.</text>
-      <text class="nm2-note" x="1180" y="594" text-anchor="middle">publicNetworkAccess: Disabled</text>
-      <text class="nm2-note" x="1180" y="614" text-anchor="middle">The private endpoint is the only way in,</text>
-      <text class="nm2-note" x="1180" y="634" text-anchor="middle">and only from inside your own network.</text>
+      <line x1="772" y1="305" x2="900" y2="305" stroke="#8d8d8d" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#ar)"/>
+      <rect x="900" y="273" width="200" height="64" fill="#0b0b0b" stroke="#4a4a4a" stroke-width="1.6"/>
+      <text class="nm2-name" x="1000.0" y="310" text-anchor="middle">Peer to your own network</text>
+      <rect x="900" y="345" width="200" height="30" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
+      <text class="nm2-tag" x="1000.0" y="364" text-anchor="middle">optional, and yours</text>
+      <rect x="620" y="36" width="330" height="118" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
+      <text class="nm2-note" x="785" y="68" text-anchor="middle">Private endpoints attach to the virtual</text>
+      <text class="nm2-note" x="785" y="88" text-anchor="middle">network through subnets. Each one is a</text>
+      <text class="nm2-note" x="785" y="108" text-anchor="middle">network interface holding a private</text>
+      <text class="nm2-note" x="785" y="128" text-anchor="middle">address from the subnet it sits in.</text>
+      <rect x="880" y="450" width="330" height="138" fill="#0b0b0b" stroke="#c9c9c9" stroke-width="1.2"/>
+      <text class="nm2-note" x="1045" y="484" text-anchor="middle">Every service on the left has restricted IP</text>
+      <text class="nm2-note" x="1045" y="504" text-anchor="middle">addresses and no public route at all.</text>
+      <text class="nm2-note" x="1045" y="524" text-anchor="middle">publicNetworkAccess: Disabled</text>
+      <text class="nm2-note" x="1045" y="544" text-anchor="middle">The private endpoint is the only way in,</text>
+      <text class="nm2-note" x="1045" y="564" text-anchor="middle">and only from inside your own network.</text>
     </svg>
           <div class="nm-key">
             <div>
@@ -2030,12 +2012,12 @@
       </div>
     </section>
 
-    <!-- ======= Compliance Banner ======= -->
+            <!-- ======= Compliance Banner ======= -->
     <div class="brand-banner">
       <div class="banner-inner">
         <span class="banner-tag">Provenance</span>
         <h3 class="banner-title"><span class="highlight-line">Built Where "Looks Secure"</span><br>Was Never Good Enough.</h3>
-        <p class="banner-text">Federal programs do not approve an architecture because it reads well. It gets reviewed, tested, and signed off, or it does not go live. Nerve Backend is <span class="highlight-line">that same architecture</span>, taken out of that environment and packaged for businesses that want the result without the process. You deploy it into your own cloud account, you own the templates outright, and <span class="highlight-line">the decisions that normally take a specialist months are already made</span> and documented. The control mapping ships with the templates, in full, so you can judge the work before you ever talk to us.</p>
+        <p class="banner-text">Federal programs do not approve an architecture because it reads well. It gets reviewed, tested, and signed off, or it does not go live. Nerve Secure is <span class="highlight-line">that same architecture</span>, taken out of that environment and packaged for businesses that want the result without the process. You deploy it into your own cloud account, you own the templates outright, and <span class="highlight-line">the decisions that normally take a specialist months are already made</span> and documented. The control mapping ships with the templates, in full, so you can judge the work before you ever talk to us.</p>
         <div class="framework-tags">
           <span class="framework-tag">NIST SP 800-171</span>
           <span class="framework-tag">FedRAMP Ready</span>
@@ -2046,7 +2028,7 @@
       </div>
     </div>
 
-            <!-- ======= Contact ======= -->
+    <!-- ======= Contact ======= -->
     <section id="contact">
       <div class="section-container">
         <div class="section-header">

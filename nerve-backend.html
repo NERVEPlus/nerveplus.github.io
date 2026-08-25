@@ -207,7 +207,7 @@
       font-size: 10px;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--text-primary);
       display: block;
       padding-bottom: 12px;
       border-bottom: 1px solid var(--border-light);
@@ -1358,6 +1358,46 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* ── NARROW SCREENS ── */
+    /* A grid track defaults to min-width:auto, so one unbreakable word wider
+       than the column pushes the whole grid past the viewport and drags the
+       page with it. That is what put the header off screen on a phone: the
+       document became 410px wide, so the hamburger sat beyond the right edge.
+       Letting the tracks shrink is the fix; the smaller type is what keeps the
+       longest word inside them. */
+    .hero-grid > *,
+    .hero-text,
+    .page-hero-grid > * { min-width: 0; }
+
+    .hero-text h1,
+    .page-hero h1 { overflow-wrap: break-word; }
+
+    @media (max-width: 560px) {
+      /* The subline is three phrases separated by slashes. On a phone they
+         stack; the separators only make sense on one line. */
+      .page-hero-sub .sep { display: none; }
+      /* nowrap keeps the three phrases whole on one line at desktop; on a
+         phone it is what clips the longest of them. */
+      .page-hero-sub .sub-item { display: block; white-space: normal; }
+      .page-hero-sub { line-height: 1.7; margin-bottom: 32px; }
+
+      /* Same grid trap as the hero: a wide child in an auto-sized track drags
+         the page out. The diagram keeps its own horizontal scroll. */
+      .demo-split > *, .download-lede, .download-lede > * { min-width: 0; }
+      .download-lede { grid-template-columns: 1fr !important; }
+      .nm-wrap { max-width: 100%; }
+      .terminal pre { font-size: 11px; }
+    }
+
+    @media (max-width: 560px) {
+      .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em; }
+      .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em; }
+      .hero-subtitle, .page-hero-sub { font-size: 12px; letter-spacing: 0.12em; }
+      .btn-primary-cta, .btn-outline-cta, .btn-accent-cta {
+        display: block; width: 100%; text-align: center; margin: 0 0 10px 0;
+      }
+    }
+
     @media (max-width: 1024px) {
       .page-hero-grid { grid-template-columns: 1fr; align-items: start; }
       .product-lede { grid-template-columns: 1fr; gap: 40px; }
@@ -1374,7 +1414,7 @@
       .feature-cell:nth-last-child(-n+2) { border-bottom: none; }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1080px) {
       .header-inner { padding: 16px 20px; }
       #header.scrolled .header-inner { padding: 12px 20px; }
       .mobile-nav-toggle { display: block; }
@@ -1489,7 +1529,7 @@
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html#hero" class="logo">
         <span class="logo-mark"></span>
         NERVE PLUS INC
       </a>
@@ -1500,7 +1540,9 @@
 
       <nav id="navbar">
         <ul>
+          <li><a href="index.html#hero">Home</a></li>
           <li><a href="index.html#services">Solutions</a></li>
+          <li><a href="index.html#about">About</a></li>
           <li class="nav-dropdown">
             <button class="nav-dropdown-toggle active" aria-expanded="false" aria-haspopup="true">
               Flagship Products <span class="nav-chev"></span>
@@ -1522,7 +1564,6 @@
               </a>
             </div>
           </li>
-          <li><a href="index.html#about">About</a></li>
           <li><a href="index.html#capabilities">Capabilities</a></li>
           <li><a href="docs.html">Docs</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -1545,7 +1586,7 @@
           <p class="page-hero-sub"><span class="sub-item">Passes federal penetration testing</span> <span class="sep">//</span> <span class="sub-item">Hardened against AI attacks</span> <span class="sep">//</span> <span class="sub-item">Any cloud</span></p>
           <div>
             <a href="mailto:enterprise@nerveplusinc.com?subject=Nerve%20Backend%20%E2%80%94%20architecture%20brief&amp;body=Hello%2C%0A%0APlease%20send%20the%20Nerve%20Backend%20architecture%20brief%20and%20the%20control%20mapping.%0A%0A%20%20Company%3A%0A%20%20Cloud%20provider%3A%20%20Azure%20%2F%20AWS%20%2F%20Google%20Cloud%0A%20%20What%20we%20run%20today%3A%0A%20%20What%20we%20are%20reviewing%20against%3A%20%20NIST%20800-171%20%2F%20FedRAMP%20%2F%20FISMA%20%2F%20other%0A%0AThank%20you%2C%0A" class="btn-primary-cta">Get the Brief, Free</a>
-            <a href="#overview" class="btn-outline-cta">What You Get</a>
+            <a href="#blueprints" class="btn-outline-cta">See The Library</a>
             <a href="#download" class="btn-accent-cta">Request a Demo</a>
           </div>
         </div>
@@ -1569,6 +1610,97 @@
   </section>
 
   <main id="main">
+
+<!-- ======= Blueprints ======= -->
+    <section id="blueprints">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-tag">Blueprints</span>
+          <h2 class="section-title">Pick A Shape, Not A Checklist</h2>
+          <div class="section-rule"></div>
+        </div>
+
+        <p class="bp-lede">Sign in with the cloud account you already have and Nerve opens on these.
+        Each one is a complete working backend in your own account &mdash; you pick the shape, then
+        whether it is reachable from the internet or closed to everything but the addresses you name.</p>
+
+        <div class="bp-grid">
+          <div class="bp-cell">
+            <span class="bp-num">01</span>
+            <h3>Classic web application</h3>
+            <p class="bp-tagline">A site people visit, an API behind it, and somewhere to put the data</p>
+            <p>The usual shape: something public that people load, a private tier doing the work, scheduled and triggered jobs, a database and file storage. Pick this if you are not sure.</p>
+            <svg class="bp-dia" viewBox="0 0 404 240" role="img" aria-label="Classic web application architecture"><rect x="52" y="6" width="348" height="228" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="120.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 120.0h17M20 111.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M31 120.0 C36.0 120.0 36.0 49.0 66 49.0" fill="none" stroke="#f5765b" stroke-width="1.2" opacity=".8"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#f5765b" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#f5765b"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Frontend web app</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#f5765b">OPEN</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Backend web app</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Function app</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="190" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="190" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="209.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="209.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
+            <div class="bp-pieces">
+              <span class="bp-piece">Virtual network</span>
+              <span class="bp-piece">Frontend web app</span>
+              <span class="bp-piece">Backend web app</span>
+              <span class="bp-piece">Function app</span>
+              <span class="bp-piece">Relational database</span>
+              <span class="bp-piece">Storage account</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">02</span>
+            <h3>API only</h3>
+            <p class="bp-tagline">No front end. Something else already owns that</p>
+            <p>For a mobile app, a partner integration, or a front end you host somewhere else entirely. Deliberately has no public web tier, so there is one less thing reachable from outside.</p>
+            <svg class="bp-dia" viewBox="0 0 404 162" role="img" aria-label="API only architecture"><rect x="52" y="6" width="348" height="150" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="81.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 81.0h17M20 72.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Backend web app</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
+            <div class="bp-pieces">
+              <span class="bp-piece">Virtual network</span>
+              <span class="bp-piece">Backend web app</span>
+              <span class="bp-piece">Relational database</span>
+              <span class="bp-piece">Storage account</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">03</span>
+            <h3>Container platform</h3>
+            <p class="bp-tagline">You already build images and want somewhere to run them</p>
+            <p>A managed cluster with a private registry beside it. The control plane and the registry are both treated as data-grade rather than as infrastructure nobody looks at.</p>
+            <svg class="bp-dia" viewBox="0 0 404 201" role="img" aria-label="Container platform architecture"><rect x="52" y="6" width="348" height="189" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="100.5" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 100.5h17M20 92.0a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Container cluster</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Image registry</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
+            <div class="bp-pieces">
+              <span class="bp-piece">Virtual network</span>
+              <span class="bp-piece">Container cluster</span>
+              <span class="bp-piece">Image registry</span>
+              <span class="bp-piece">Relational database</span>
+              <span class="bp-piece">Storage account</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">04</span>
+            <h3>Event driven</h3>
+            <p class="bp-tagline">Work arrives, gets queued, and something picks it up</p>
+            <p>For ingestion, processing pipelines and anything bursty. No always-on web tier: the queue is the front door, and it is closed.</p>
+            <svg class="bp-dia" viewBox="0 0 404 201" role="img" aria-label="Event driven architecture"><rect x="52" y="6" width="348" height="189" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="100.5" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 100.5h17M20 92.0a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Message queue</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Function app</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
+            <div class="bp-pieces">
+              <span class="bp-piece">Virtual network</span>
+              <span class="bp-piece">Message queue</span>
+              <span class="bp-piece">Function app</span>
+              <span class="bp-piece">Relational database</span>
+              <span class="bp-piece">Storage account</span>
+            </div>
+          </div>
+          <div class="bp-cell">
+            <span class="bp-num">05</span>
+            <h3>AI and retrieval</h3>
+            <p class="bp-tagline">A model, an index of your documents, and the documents themselves</p>
+            <p>The retrieval stack, with all three parts closed rather than just the model. This is the shape that most often gets stood up outside IT and ends up holding the most sensitive material.</p>
+            <svg class="bp-dia" viewBox="0 0 404 162" role="img" aria-label="AI and retrieval architecture"><rect x="52" y="6" width="348" height="150" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="81.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 81.0h17M20 72.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">AI model endpoint</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Search index</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Document store</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
+            <div class="bp-pieces">
+              <span class="bp-piece">Virtual network</span>
+              <span class="bp-piece">AI model endpoint</span>
+              <span class="bp-piece">Search index</span>
+              <span class="bp-piece">Document store</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="bp-foot">Deploys today on Microsoft Azure. Amazon Web Services and Google Cloud are
+        read today and are an emitter away from deploying, because the blueprint itself contains no
+        provider names.</p>
+      </div>
+    </section>
 
     <!-- ======= Why It Matters ======= -->
     <section id="why">
@@ -1693,188 +1825,7 @@
       </div>
     </section>
 
-    <!-- ======= Compliance Banner ======= -->
-    <div class="brand-banner">
-      <div class="banner-inner">
-        <span class="banner-tag">Provenance</span>
-        <h3 class="banner-title"><span class="highlight-line">Built Where "Looks Secure"</span><br>Was Never Good Enough.</h3>
-        <p class="banner-text">Federal programs do not approve an architecture because it reads well. It gets reviewed, tested, and signed off, or it does not go live. Nerve Backend is <span class="highlight-line">that same architecture</span>, taken out of that environment and packaged for businesses that want the result without the process. You deploy it into your own cloud account, you own the templates outright, and <span class="highlight-line">the decisions that normally take a specialist months are already made</span> and documented. The control mapping ships with the templates, in full, so you can judge the work before you ever talk to us.</p>
-        <div class="framework-tags">
-          <span class="framework-tag">NIST SP 800-171</span>
-          <span class="framework-tag">FedRAMP Ready</span>
-          <span class="framework-tag">FISMA</span>
-          <span class="framework-tag">Zero Trust</span>
-          <span class="framework-tag">AI Threat Hardened</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- ======= Blueprints ======= -->
-    <section id="blueprints">
-      <div class="section-container">
-        <div class="section-header">
-          <span class="section-tag">Blueprints</span>
-          <h2 class="section-title">Pick A Shape, Not A Checklist</h2>
-          <div class="section-rule"></div>
-        </div>
-
-        <p class="bp-lede">Sign in with the cloud account you already have and Nerve opens on these.
-        Each one is a complete working backend in your own account &mdash; you pick the shape, then
-        whether it is reachable from the internet or closed to everything but the addresses you name.
-        <span class="highlight-line">Both are the same pieces.</span> The difference is four flags,
-        and you can move between them without a migration.</p>
-
-        <div class="bp-grid">
-          <div class="bp-cell">
-            <span class="bp-num">01</span>
-            <h3>Classic web application</h3>
-            <p class="bp-tagline">A site people visit, an API behind it, and somewhere to put the data</p>
-            <p>The usual shape: something public that people load, a private tier doing the work, scheduled and triggered jobs, a database and file storage. Pick this if you are not sure.</p>
-            <svg class="bp-dia" viewBox="0 0 404 240" role="img" aria-label="Classic web application architecture"><rect x="52" y="6" width="348" height="228" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="120.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 120.0h17M20 111.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M31 120.0 C36.0 120.0 36.0 49.0 66 49.0" fill="none" stroke="#f5765b" stroke-width="1.2" opacity=".8"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#f5765b" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#f5765b"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Frontend web app</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#f5765b">OPEN</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Backend web app</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Function app</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="190" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="190" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="209.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="209.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
-            <div class="bp-pieces">
-              <span class="bp-piece">Virtual network</span>
-              <span class="bp-piece">Frontend web app</span>
-              <span class="bp-piece">Backend web app</span>
-              <span class="bp-piece">Function app</span>
-              <span class="bp-piece">Relational database</span>
-              <span class="bp-piece">Storage account</span>
-            </div>
-          </div>
-          <div class="bp-cell">
-            <span class="bp-num">02</span>
-            <h3>API only</h3>
-            <p class="bp-tagline">No front end. Something else already owns that</p>
-            <p>For a mobile app, a partner integration, or a front end you host somewhere else entirely. Deliberately has no public web tier, so there is one less thing reachable from outside.</p>
-            <svg class="bp-dia" viewBox="0 0 404 162" role="img" aria-label="API only architecture"><rect x="52" y="6" width="348" height="150" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="81.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 81.0h17M20 72.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Backend web app</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
-            <div class="bp-pieces">
-              <span class="bp-piece">Virtual network</span>
-              <span class="bp-piece">Backend web app</span>
-              <span class="bp-piece">Relational database</span>
-              <span class="bp-piece">Storage account</span>
-            </div>
-          </div>
-          <div class="bp-cell">
-            <span class="bp-num">03</span>
-            <h3>Container platform</h3>
-            <p class="bp-tagline">You already build images and want somewhere to run them</p>
-            <p>A managed cluster with a private registry beside it. The control plane and the registry are both treated as data-grade rather than as infrastructure nobody looks at.</p>
-            <svg class="bp-dia" viewBox="0 0 404 201" role="img" aria-label="Container platform architecture"><rect x="52" y="6" width="348" height="189" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="100.5" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 100.5h17M20 92.0a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Container cluster</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Image registry</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
-            <div class="bp-pieces">
-              <span class="bp-piece">Virtual network</span>
-              <span class="bp-piece">Container cluster</span>
-              <span class="bp-piece">Image registry</span>
-              <span class="bp-piece">Relational database</span>
-              <span class="bp-piece">Storage account</span>
-            </div>
-          </div>
-          <div class="bp-cell">
-            <span class="bp-num">04</span>
-            <h3>Event driven</h3>
-            <p class="bp-tagline">Work arrives, gets queued, and something picks it up</p>
-            <p>For ingestion, processing pipelines and anything bursty. No always-on web tier: the queue is the front door, and it is closed.</p>
-            <svg class="bp-dia" viewBox="0 0 404 201" role="img" aria-label="Event driven architecture"><rect x="52" y="6" width="348" height="189" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="100.5" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 100.5h17M20 92.0a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">Message queue</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Function app</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Relational database</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="151" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="151" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="170.0" font-size="11.5" fill="#e8edf2">Storage account</text><text x="372" y="170.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
-            <div class="bp-pieces">
-              <span class="bp-piece">Virtual network</span>
-              <span class="bp-piece">Message queue</span>
-              <span class="bp-piece">Function app</span>
-              <span class="bp-piece">Relational database</span>
-              <span class="bp-piece">Storage account</span>
-            </div>
-          </div>
-          <div class="bp-cell">
-            <span class="bp-num">05</span>
-            <h3>AI and retrieval</h3>
-            <p class="bp-tagline">A model, an index of your documents, and the documents themselves</p>
-            <p>The retrieval stack, with all three parts closed rather than just the model. This is the shape that most often gets stood up outside IT and ends up holding the most sensitive material.</p>
-            <svg class="bp-dia" viewBox="0 0 404 162" role="img" aria-label="AI and retrieval architecture"><rect x="52" y="6" width="348" height="150" rx="7" fill="none" stroke="#5bb8f5" stroke-width="1.1" opacity=".85"/><circle cx="20" cy="81.0" r="8.5" fill="none" stroke="#7c8794" stroke-width="1.1"/><path d="M11.5 81.0h17M20 72.5a12 12 0 0 1 0 17a12 12 0 0 1 0-17" fill="none" stroke="#7c8794" stroke-width="1.1"/><rect x="66" y="34" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="34" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="53.0" font-size="11.5" fill="#e8edf2">AI model endpoint</text><text x="372" y="53.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="73" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="73" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="92.0" font-size="11.5" fill="#e8edf2">Search index</text><text x="372" y="92.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text><rect x="66" y="112" width="320" height="30" rx="5" fill="#0d1218" stroke="#5bf5a0" stroke-width="1.1"/><rect x="66" y="112" width="3" height="30" rx="1.5" fill="#5bf5a0"/><text x="80" y="131.0" font-size="11.5" fill="#e8edf2">Document store</text><text x="372" y="131.0" font-size="8" letter-spacing="1.1" text-anchor="end" fill="#5bf5a0">PRIVATE</text></svg>
-            <div class="bp-pieces">
-              <span class="bp-piece">Virtual network</span>
-              <span class="bp-piece">AI model endpoint</span>
-              <span class="bp-piece">Search index</span>
-              <span class="bp-piece">Document store</span>
-            </div>
-          </div>
-        </div>
-
-        <p class="bp-foot">Deploys today on Microsoft Azure. Amazon Web Services and Google Cloud are
-        read today and are an emitter away from deploying, because the blueprint itself contains no
-        provider names.</p>
-      </div>
-    </section>
-
-    <!-- ======= Overview ======= -->
-    <section id="overview">
-      <div class="section-container">
-        <div class="section-header">
-          <span class="section-tag">What It Is</span>
-          <h2 class="section-title">Security That Ships With The Stack</h2>
-          <div class="section-rule"></div>
-        </div>
-
-        <div class="product-lede">
-          <div>
-            <p><span class="highlight-line">Government-grade security.</span> Nerve Backend is the backend infrastructure architecture we built and deployed inside federal programs, packaged so any business can stand it up in its own environment.</p>
-            <p>Restricted IP ranges, private endpoints, and full virtual network configuration come pre-wired and validated against federal backend testing benchmarks. Not a checklist to work through after launch, but the starting state of the deployment.</p>
-            <p>The architecture is <span class="highlight-line">portable by design</span>. The same security model targets Azure, AWS, Google Cloud, or an open-source stack you host yourself, so the posture travels with you rather than locking you to one provider.</p>
-          </div>
-
-          <div class="deliverables">
-            <div class="deliverables-head">What You Receive</div>
-            <div class="deliverable-row"><span class="deliverable-num">01</span><span>Infrastructure-as-code templates targeting your platform</span></div>
-            <div class="deliverable-row"><span class="deliverable-num">02</span><span>Network architecture, documented and diagrammed</span></div>
-            <div class="deliverable-row"><span class="deliverable-num">03</span><span>Control mapping to the federal benchmarks it satisfies</span></div>
-            <div class="deliverable-row"><span class="deliverable-num">04</span><span>Deployment and validation runbook</span></div>
-            <div class="deliverable-row"><span class="deliverable-num">05</span><span>Handover, so your team owns and operates it</span></div>
-          </div>
-        </div>
-
-        <div class="feature-grid">
-          <div class="feature-cell">
-            <span class="feature-number">01</span>
-            <div class="feature-divider"></div>
-            <h3>Private Endpoints</h3>
-            <p>Databases, storage, and internal APIs are reachable only over private links. No service in the estate holds a public address that an attacker can enumerate.</p>
-          </div>
-
-          <div class="feature-cell">
-            <span class="feature-number">02</span>
-            <div class="feature-divider"></div>
-            <h3>Network Isolation</h3>
-            <p>Virtual network and subnet architecture with segmentation, security groups, and service endpoints configured to keep every tier separated by default.</p>
-          </div>
-
-          <div class="feature-cell">
-            <span class="feature-number">03</span>
-            <div class="feature-divider"></div>
-            <h3>Restricted IP Access</h3>
-            <p>Allowlisting enforced at the management plane, the data plane, and the deployment pipeline. Approved addresses reach the estate; nothing else does.</p>
-          </div>
-
-          <div class="feature-cell">
-            <span class="feature-number">04</span>
-            <div class="feature-divider"></div>
-            <h3>Federal Benchmarks</h3>
-            <p>Configurations mapped to NIST SP 800-171, FedRAMP, and FISMA control families, the same benchmarks that govern federal program infrastructure.</p>
-          </div>
-
-          <div class="feature-cell">
-            <span class="feature-number">05</span>
-            <div class="feature-divider"></div>
-            <h3>AI Attack Hardening</h3>
-            <p>Model endpoints locked down, inference traffic isolated from the general data plane, and adversarial input paths constrained so an AI surface cannot become the way in.</p>
-          </div>
-
-          <div class="feature-cell">
-            <span class="feature-number">06</span>
-            <div class="feature-divider"></div>
-            <h3>Reusable Architecture</h3>
-            <p>One security model, expressed as infrastructure-as-code per platform. Rebuild the estate from source, review it in version control, and redeploy it anywhere.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    
+                
     <!-- ======= Contact ======= -->
     <section id="contact">
       <div class="section-container">
