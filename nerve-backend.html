@@ -1358,6 +1358,41 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* The three calls to action, as a row that wraps cleanly.
+       They were inline-block with margin-left on the second and third, so a
+       wrap left the third indented under the first and the gaps uneven. A flex
+       row with one gap has neither problem, and each button keeps its own
+       width instead of being stretched. */
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .hero-actions > a {
+      margin: 0 !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* The band where the full menu still fits but only just.
+       Pushing the hamburger up to 1500 would hand a mobile menu to plenty of
+       laptops; tightening the bar instead keeps the real nav for anyone whose
+       screen can carry it. The two nowraps are the actual fault: the logo and
+       the dropdown toggle were breaking mid-phrase rather than the bar
+       admitting it had run out of room. */
+    .logo, .nav-dropdown-toggle { white-space: nowrap; }
+
+    @media (min-width: 1301px) and (max-width: 1480px) {
+      .header-inner { padding: 20px 24px; }
+      #navbar ul { gap: 2px; }
+      #navbar a, .nav-dropdown-toggle { font-size: 11px; letter-spacing: 0.09em; }
+      .logo { font-size: 17px; letter-spacing: 0.16em; }
+    }
+
     /* ── NARROW SCREENS ── */
     /* A grid track defaults to min-width:auto, so one unbreakable word wider
        than the column pushes the whole grid past the viewport and drags the
@@ -1393,9 +1428,8 @@
       .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em; }
       .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em; }
       .hero-subtitle, .page-hero-sub { font-size: 12px; letter-spacing: 0.12em; }
-      .btn-primary-cta, .btn-outline-cta, .btn-accent-cta {
-        display: block; width: 100%; text-align: center; margin: 0 0 10px 0;
-      }
+      .hero-actions { flex-direction: column; }
+      .hero-actions > a { width: 100%; }
     }
 
     @media (max-width: 1024px) {
@@ -1414,7 +1448,7 @@
       .feature-cell:nth-last-child(-n+2) { border-bottom: none; }
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1300px) {
       .header-inner { padding: 16px 20px; }
       #header.scrolled .header-inner { padding: 12px 20px; }
       .mobile-nav-toggle { display: block; }
@@ -1584,7 +1618,7 @@
           <h1>Nerve<br>Backend</h1>
           <div class="page-hero-rule"></div>
           <p class="page-hero-sub"><span class="sub-item">Passes federal penetration testing</span> <span class="sep">//</span> <span class="sub-item">Hardened against AI attacks</span> <span class="sep">//</span> <span class="sub-item">Any cloud</span></p>
-          <div>
+          <div class="hero-actions">
             <a href="mailto:enterprise@nerveplusinc.com?subject=Nerve%20Backend%20%E2%80%94%20architecture%20brief&amp;body=Hello%2C%0A%0APlease%20send%20the%20Nerve%20Backend%20architecture%20brief%20and%20the%20control%20mapping.%0A%0A%20%20Company%3A%0A%20%20Cloud%20provider%3A%20%20Azure%20%2F%20AWS%20%2F%20Google%20Cloud%0A%20%20What%20we%20run%20today%3A%0A%20%20What%20we%20are%20reviewing%20against%3A%20%20NIST%20800-171%20%2F%20FedRAMP%20%2F%20FISMA%20%2F%20other%0A%0AThank%20you%2C%0A" class="btn-primary-cta">Get the Brief, Free</a>
             <a href="#blueprints" class="btn-outline-cta">See The Library</a>
             <a href="#download" class="btn-accent-cta">Request a Demo</a>

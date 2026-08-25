@@ -1043,6 +1043,21 @@
     }
 
     /* ── RESPONSIVE ── */
+    /* The band where the full menu still fits but only just.
+       Pushing the hamburger up to 1500 would hand a mobile menu to plenty of
+       laptops; tightening the bar instead keeps the real nav for anyone whose
+       screen can carry it. The two nowraps are the actual fault: the logo and
+       the dropdown toggle were breaking mid-phrase rather than the bar
+       admitting it had run out of room. */
+    .logo, .nav-dropdown-toggle { white-space: nowrap; }
+
+    @media (min-width: 1301px) and (max-width: 1480px) {
+      .header-inner { padding: 20px 24px; }
+      #navbar ul { gap: 2px; }
+      #navbar a, .nav-dropdown-toggle { font-size: 11px; letter-spacing: 0.09em; }
+      .logo { font-size: 17px; letter-spacing: 0.16em; }
+    }
+
     /* ── NARROW SCREENS ── */
     /* A grid track defaults to min-width:auto, so one unbreakable word wider
        than the column pushes the whole grid past the viewport and drags the
@@ -1101,7 +1116,7 @@
       }
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1300px) {
       .header-inner {
         padding: 16px 20px;
       }
@@ -1312,7 +1327,7 @@
           <h1>Enterprise<br>Intelligence.<br>Redefined<span class="hero-period">.</span></h1>
           <div class="hero-rule"></div>
           <p class="hero-subtitle">
-            AI <span>//</span> Infrastructure <span>//</span> Security
+            Infrastructure <span>//</span> Security <span>//</span> AI
           </p>
           <div>
             <a href="#services" class="btn-primary-cta">Explore Solutions</a>
@@ -1353,22 +1368,22 @@
           <div class="service-cell">
             <span class="service-number">01</span>
             <div class="service-divider"></div>
-            <h3>Enterprise AI</h3>
-            <p>Advanced machine learning and artificial intelligence solutions designed for mission-critical applications. Scalable, secure, and built for the demands of enterprise operations.</p>
+            <h3>Infrastructure</h3>
+            <p>A library of five backend architectures &mdash; a web application, an API, a container platform, an event pipeline, an AI stack &mdash; deployed into your own cloud account. Configured in plain English rather than hand-built, in a day rather than a quarter.</p>
           </div>
 
           <div class="service-cell">
             <span class="service-number">02</span>
             <div class="service-divider"></div>
-            <h3>Infrastructure</h3>
-            <p>Cloud-native architecture and hybrid infrastructure solutions. Engineered for resilience, optimized for performance, and designed to scale with your enterprise needs.</p>
+            <h3>Security</h3>
+            <p>The same architectures with the network closed. Private endpoints on every service, public access denied at the resource, shared keys disabled, and only the addresses you name getting in. The posture that passed federal penetration testing.</p>
           </div>
 
           <div class="service-cell">
             <span class="service-number">03</span>
             <div class="service-divider"></div>
-            <h3>Security</h3>
-            <p>FedRAMP-ready, FISMA-compliant security frameworks. Zero-trust architecture with advanced threat detection and response capabilities meeting federal standards.</p>
+            <h3>Enterprise AI</h3>
+            <p>A model endpoint, an index of your documents and the documents themselves, stood up and closed together. Usually the newest thing in an estate and the least governed, which is why it is hardened from the first deployment rather than after an assessment.</p>
           </div>
         </div>
       </div>
