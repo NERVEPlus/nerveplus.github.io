@@ -384,10 +384,10 @@
     /* ── PAGE HERO ── */
     #page-hero {
       position: relative;
-      min-height: 100vh;
+      min-height: min(100vh, 780px);
       display: flex;
       align-items: center;
-      padding: 160px 0 100px;
+      padding: 130px 0 80px;
       border-bottom: 2px solid var(--border-heavy);
     }
 
@@ -1577,8 +1577,11 @@
     .hero-text,
     .page-hero-grid > * { min-width: 0; }
 
-    .hero-text h1,
-    .page-hero h1 { overflow-wrap: break-word; }
+    /* Deliberately NOT global. break-word does not wait until a word cannot
+       fit the line, it breaks whenever the line runs out, so ENTERPRISE
+       INTELLIGENCE. REDEFINED came apart as INTELLIGENC / E. on plenty of
+       widths that had room. It is a last resort for the narrowest screens,
+       where one word genuinely is wider than the viewport. */
 
     @media (max-width: 560px) {
       /* The subline is three phrases separated by slashes. On a phone they
@@ -1598,8 +1601,10 @@
     }
 
     @media (max-width: 560px) {
-      .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em; }
-      .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em; }
+      .hero-text h1 { font-size: clamp(26px, 8.5vw, 40px); letter-spacing: 0.04em;
+                      overflow-wrap: break-word; }
+      .page-hero h1 { font-size: clamp(28px, 9vw, 44px); letter-spacing: 0.04em;
+                      overflow-wrap: break-word; }
       .hero-subtitle, .page-hero-sub { font-size: 12px; letter-spacing: 0.12em; }
       .hero-actions { flex-direction: column; }
       .hero-actions > a { width: 100%; }
